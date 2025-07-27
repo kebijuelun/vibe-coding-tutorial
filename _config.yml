@@ -4,7 +4,7 @@ description: 全面的AI编程工具使用指南，包括Claude Code、Cursor、
 author: AI编程工具指南团队
 email: contact@example.com
 url: https://lwz.github.io
-baseurl: /vibe_code_cursor
+baseurl: /vibe-coding-tutorial
 
 # Build settings
 theme: minima
@@ -24,7 +24,7 @@ twitter:
 social:
   name: AI编程工具指南
   links:
-    - https://github.com/lwz/vibe_code_cursor
+    - https://github.com/lwz/vibe-coding-tutorial
 
 # Google Analytics (optional)
 # google_analytics: UA-XXXXXXXXX-X

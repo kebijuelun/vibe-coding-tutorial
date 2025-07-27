@@ -40,15 +40,15 @@
 ## 🚀 快速开始
 
 ### 在线访问
-直接访问：[https://lwz.github.io/vibe_code_cursor](https://lwz.github.io/vibe_code_cursor)
+直接访问：[https://lwz.github.io/vibe-coding-tutorial](https://lwz.github.io/vibe-coding-tutorial)
 
 ### 本地运行
 ```bash
 # 克隆仓库
-git clone https://github.com/lwz/vibe_code_cursor.git
+git clone https://github.com/lwz/vibe-coding-tutorial.git
 
 # 进入目录
-cd vibe_code_cursor
+cd vibe-coding-tutorial
 
 # 使用任意HTTP服务器运行（如Python）
 python -m http.server 8000
@@ -98,8 +98,8 @@ npx serve .
 
 ## 📞 联系我们
 
-- **GitHub Issues**：[提交问题或建议](https://github.com/lwz/vibe_code_cursor/issues)
-- **讨论区**：[GitHub Discussions](https://github.com/lwz/vibe_code_cursor/discussions)
+- **GitHub Issues**：[提交问题或建议](https://github.com/lwz/vibe-coding-tutorial/issues)
+- **讨论区**：[GitHub Discussions](https://github.com/lwz/vibe-coding-tutorial/discussions)
 
 ## 🙏 致谢
 
