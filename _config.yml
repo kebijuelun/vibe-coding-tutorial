@@ -3,7 +3,7 @@ title: AI编程工具指南
 description: 全面的AI编程工具使用指南，包括Claude Code、Cursor、Vibe Coding等主流工具
 author: AI编程工具指南团队
 email: contact@example.com
-url: https://lwz.github.io
+url: https://kebijuelun.github.io
 baseurl: /vibe-coding-tutorial
 
 # Build settings
@@ -24,7 +24,7 @@ twitter:
 social:
   name: AI编程工具指南
   links:
-    - https://github.com/lwz/vibe-coding-tutorial
+    - https://github.com/kebijuelun/vibe-coding-tutorial
 
 # Google Analytics (optional)
 # google_analytics: UA-XXXXXXXXX-X

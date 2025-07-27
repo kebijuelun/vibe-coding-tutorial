@@ -40,12 +40,12 @@
 ## 🚀 快速开始
 
 ### 在线访问
-直接访问：[https://lwz.github.io/vibe-coding-tutorial](https://lwz.github.io/vibe-coding-tutorial)
+直接访问：[https://kebijuelun.github.io/vibe-coding-tutorial](https://kebijuelun.github.io/vibe-coding-tutorial)
 
 ### 本地运行
 ```bash
 # 克隆仓库
-git clone https://github.com/lwz/vibe-coding-tutorial.git
+git clone https://github.com/kebijuelun/vibe-coding-tutorial.git
 
 # 进入目录
 cd vibe-coding-tutorial
@@ -98,8 +98,8 @@ npx serve .
 
 ## 📞 联系我们
 
-- **GitHub Issues**：[提交问题或建议](https://github.com/lwz/vibe-coding-tutorial/issues)
-- **讨论区**：[GitHub Discussions](https://github.com/lwz/vibe-coding-tutorial/discussions)
+- **GitHub Issues**：[提交问题或建议](https://github.com/kebijuelun/vibe-coding-tutorial/issues)
+- **讨论区**：[GitHub Discussions](https://github.com/kebijuelun/vibe-coding-tutorial/discussions)
 
 ## 🙏 致谢
 
