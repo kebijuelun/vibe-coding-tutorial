@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://lwz.github.io/vibe_code_cursor/sitemap.xml
+
+# Allow crawling of HTML files
+Allow: /*.html
+
+# Disallow crawling of configuration files
+Disallow: /_config.yml
+Disallow: /.github/
+Disallow: /README.md
+Disallow: /LICENSE

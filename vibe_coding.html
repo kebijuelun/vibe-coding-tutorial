@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding: AI辅助编程新时代完全指南</title>
+    <style>
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #edf2f7;
+            --text-secondary: #a0aec0;
+            --accent: #9f7aea;
+            --accent-light: #b794f6;
+            --code-bg: #1a202c;
+            --border: #2d3748;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --warning: #f6ad55;
+            --success: #68d391;
+            --danger: #fc8181;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 900px;
+            margin: 0 auto 2rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            width: 300px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .toc {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .toc h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.3rem;
+        }
+
+        .toc-list a {
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent-light);
+            background-color: rgba(159, 122, 234, 0.1);
+            border-left-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .toc-list a.active {
+            color: var(--accent);
+            background-color: rgba(159, 122, 234, 0.15);
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .toc-list .toc-subitem {
+            margin-left: 1rem;
+            border-left: 2px solid var(--border);
+            padding-left: 0;
+        }
+
+        .toc-list .toc-subitem a {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.4rem 0.8rem;
+            margin-left: 1rem;
+            position: relative;
+        }
+
+        .toc-list .toc-subitem a::before {
+            content: "◦";
+            position: absolute;
+            left: -0.5rem;
+            color: var(--accent);
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toc-list .toc-subitem a:hover::before,
+        .toc-list .toc-subitem a.active::before {
+            opacity: 1;
+        }
+
+        .toc-list .toc-subitem a:hover {
+            color: var(--accent-light);
+            background-color: rgba(159, 122, 234, 0.08);
+        }
+
+        .toc-list .toc-subitem a.active {
+            color: var(--accent);
+            background-color: rgba(159, 122, 234, 0.12);
+            font-weight: 500;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        /* Content Sections */
+        section {
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.8rem;
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        /* Code Styles */
+        code {
+            font-family: 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            background-color: var(--code-bg);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: var(--accent-light);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 16px var(--shadow);
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px var(--shadow);
+        }
+
+        .feature-card h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Tool Cards */
+        .tool-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(10px);
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Image Styles */
+        .image-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--border);
+        }
+
+        .image-caption {
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Example Sections */
+        .example-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .example-title {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(159, 122, 234, 0.1), rgba(183, 148, 246, 0.1));
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-box h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(246, 173, 85, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-size: 1.2rem;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: rgba(104, 211, 145, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .success-box::before {
+            content: "✅ ";
+            font-size: 1.2rem;
+        }
+
+        /* Steps */
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .badge-warning {
+            background-color: var(--warning);
+            color: var(--bg-primary);
+        }
+
+        .badge-success {
+            background-color: var(--success);
+            color: var(--bg-primary);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                margin-bottom: 2rem;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-secondary);
+                padding: 1rem 0;
+                box-shadow: 0 4px 12px var(--shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            main {
+                padding: 0 1rem;
+            }
+
+            .feature-card, .tool-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Link Styles */
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--bg-tertiary);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-bg"></div>
+        <div class="header-content">
+            <div class="highlight-badge">🚀 AI编程新时代</div>
+            <h1>Vibe Coding 完全指南</h1>
+            <p class="subtitle">探索AI辅助编程的革命性工作方式，掌握Claude Code、Gemini CLI、Qwen Code等主流工具，开启"所想即所得"的编程新体验</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🎯 Vibe Coding</div>
+            <button class="mobile-menu-btn">☰</button>
+            <ul class="nav-links">
+                <li><a href="#concept">核心概念</a></li>
+                <li><a href="#claude-code">Claude Code</a></li>
+                <li><a href="#gemini-cli">Gemini CLI</a></li>
+                <li><a href="#qwen-code">Qwen Code</a></li>
+                <li><a href="#codex">OpenAI Codex</a></li>
+                <li><a href="#comparison">工具对比</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <aside class="sidebar">
+                <div class="toc">
+                    <h2>📚 目录导航</h2>
+                    <ul class="toc-list">
+                        <li><a href="#concept">🎨 Vibe Coding 概念</a></li>
+                        <li class="toc-subitem"><a href="#what-is-vibe">什么是 Vibe Coding</a></li>
+                        <li class="toc-subitem"><a href="#principles">核心原则</a></li>
+                        <li><a href="#claude-code">🤖 Claude Code</a></li>
+                        <li class="toc-subitem"><a href="#claude-install">安装配置</a></li>
+                        <li class="toc-subitem"><a href="#claude-tips">使用技巧</a></li>
+                        <li class="toc-subitem"><a href="#claude-cases">实战案例</a></li>
+                        <li><a href="#gemini-cli">💎 Gemini CLI</a></li>
+                        <li class="toc-subitem"><a href="#gemini-install">安装使用</a></li>
+                        <li class="toc-subitem"><a href="#gemini-features">功能特点</a></li>
+                        <li><a href="#qwen-code">🇨🇳 Qwen Code</a></li>
+                        <li class="toc-subitem"><a href="#qwen-install">快速上手</a></li>
+                        <li class="toc-subitem"><a href="#qwen-advantages">优势特色</a></li>
+                        <li><a href="#codex">⚡ OpenAI Codex</a></li>
+                        <li class="toc-subitem"><a href="#codex-usage">使用方式</a></li>
+                        <li class="toc-subitem"><a href="#codex-workflow">工作流程</a></li>
+                        <li><a href="#comparison">📊 工具对比</a></li>
+                        <li><a href="#summary">🎯 总结</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="content">
+                <section id="concept">
+                    <h2>🎨 Vibe Coding 概念</h2>
+                    
+                    <div id="what-is-vibe">
+                        <div class="highlight-box">
+                            <h4>🌟 什么是 Vibe Coding？</h4>
+                            <p>在 AI 编程辅助工具日渐兴盛的今天，<strong>"Vibe Coding"</strong> 正在成为一种全新的开发体验方式。Vibe coding 是由著名计算机科学家 <strong>Andrej Karpathy</strong> 在2025年2月提出并推广的一种 AI 辅助软件开发风格。</p>
+                        </div>
+                        
+                        <p>Karpathy 将其描述为<em>"一种新的编程方式，你完全沉浸在感觉中，拥抱指数级发展，甚至忘记代码的存在。<strong>在 vibe coding 中，程序员不需要理解代码如何或为什么工作，只需要告诉AI程序想要什么，让它为你创建产品</strong>"</em></p>
+                    </div>
+
+                    <div id="principles">
+                        <h3>🎯 核心原则</h3>
+                        <div class="feature-card">
+                            <h4>💭 意图驱动编程</h4>
+                            <p>不再需要深入了解具体的代码实现，只需要清楚地表达你想要什么，AI 会帮你实现</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4>🌊 沉浸式体验</h4>
+                            <p>完全沉浸在创造的过程中，减少与具体技术细节的交互摩擦</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4>📈 指数级效率</h4>
+                            <p>通过AI的协助，开发效率可以实现指数级的提升</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4>🎨 创意优先</h4>
+                            <p>将更多精力投入到产品设计和用户体验，而非底层代码实现</p>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>注意：</strong>本文将介绍目前主流的几款 AI 编程 CLI 工具：Claude Code、Gemini CLI、Qwen Code、Codex（OpenAI），包括它们的安装使用方法、项目应用实战（主要以 Claude Code 为例）。
+                    </div>
+                </section>
+
+                <section id="claude-code">
+                    <h2>🤖 Claude Code</h2>
+                    
+                    <div id="claude-install">
+                        <h3>📦 安装流程</h3>
+                        
+                        <h4>第一步：安装 Claude Code</h4>
+                        <div class="code-header">
+                            <span>npm 安装命令</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+                        
+                        <p>如果遇到报错可以尝试 <a href="https://github.com/LLM-Red-Team/kimi-cc" target="_blank">https://github.com/LLM-Red-Team/kimi-cc</a> 中提供的一键安装脚本(需要提前获取 API Key 获取方式参考后面的介绍)：</p>
+                        
+                        <div class="code-header">
+                            <span>一键安装脚本</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>bash -c "$(curl -fsSL https://raw.githubusercontent.com/LLM-Red-Team/kimi-cc/refs/heads/main/install.sh)"</code></pre>
+
+                        <h4>第二步：跳过地区限制</h4>
+                        <p>因为 Claude 限制中国地区的实用，在终端运行以下命令可以跳过 Claude 的地区审核：</p>
+                        
+                        <div class="code-header">
+                            <span>跳过地区限制</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>if [ ! -f ~/.claude.json ]; then
+    echo '{ "hasCompletedOnboarding": true }' > ~/.claude.json
+fi</code></pre>
+
+                        <h4>第三步：API Key 获取</h4>
+                        <ul>
+                            <li><strong>Claude API Key 获取：</strong><a href="https://www.anthropic.com/api" target="_blank">https://www.anthropic.com/api</a>
+                                <div class="warning-box">Claude 的 API Key 获取难度比较大，同时国内使用容易有封号的风险，可以尝试使用下面的 Kimi API 替代</div>
+                            </li>
+                            <li><strong>Kimi API Key 获取：</strong><a href="https://platform.moonshot.cn" target="_blank">https://platform.moonshot.cn</a></li>
+                        </ul>
+
+                        <h4>第四步：设置 API 环境变量（以 Kimi API 为例）</h4>
+                        <p>以下 `sk-xxx` 格式的 API Key 是在以上步骤获取得到的：</p>
+                        
+                        <div class="code-header">
+                            <span>环境变量设置</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>export ANTHROPIC_BASE_URL=https://api.moonshot.cn/anthropic/
+export ANTHROPIC_API_KEY=sk-xxx</code></pre>
+
+                        <h4>第五步：启动 Claude Code</h4>
+                        <p>直接在终端输入命令 `claude` 即可：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/e677d846650943cdbc959434262831d7.png" alt="Claude Code启动界面">
+                            <div class="image-caption">Claude Code 启动界面</div>
+                        </div>
+                    </div>
+
+                    <div id="claude-tips">
+                        <h3>💡 Claude Code 使用技巧</h3>
+                        
+                        <div class="success-box">
+                            <strong>参考资料：</strong>
+                            <ul>
+                                <li>官方出品的 Claude Code 最佳使用方式：<a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank">https://www.anthropic.com/engineering/claude-code-best-practices</a></li>
+                                <li>Anthropic 团队如何使用 Claude Code 介绍：<a href="https://www.anthropic.com/news/how-anthropic-teams-use-claude-code" target="_blank">https://www.anthropic.com/news/how-anthropic-teams-use-claude-code</a></li>
+                            </ul>
+                        </div>
+
+                        <h4>1. 定制 Claude 的工作环境：`/init` 命令</h4>
+                        <p>创建 CLAUDE.md 文件是提升 Claude Code 生成质量的第一步。这个特殊文件会在会话开始时自动被 Claude 读取，成为其上下文的一部分，是记录项目特定信息的理想场所。</p>
+                        
+                        <div class="highlight-box">
+                            <h4>📝 在 CLAUDE.md 中可以记录：</h4>
+                            <ul>
+                                <li>常用 bash 命令和工具</li>
+                                <li>核心文件和实用函数路径</li>
+                                <li>代码风格指南和规范</li>
+                                <li>测试指令和流程</li>
+                                <li>仓库规范（如分支命名规则）</li>
+                                <li>开发环境设置说明</li>
+                                <li>项目特定的异常行为或警告</li>
+                            </ul>
+                        </div>
+
+                        <h4>2. 构建高效的提示工程</h4>
+                        <p>提供清晰、具体的指令是获得高质量代码生成的关键。Claude 在明确的指示下表现最佳，特别是在首次尝试时。</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/f88e2af15fa34c31a5beb7e433da6757.png" alt="提示工程对比">
+                            <div class="image-caption">好的提示工程 vs 坏的提示工程对比</div>
+                        </div>
+
+                        <div class="example-section">
+                            <div class="example-title">🎯 思考引导词使用</div>
+                            <p>使用<strong>思考引导词</strong>来触发Claude的扩展思考模式。这些特定短语会直接映射到系统中的不同思考预算级别：</p>
+                            <p><code>"think"</code> &lt; <code>"think hard"</code> &lt; <code>"think harder"</code> &lt; <code>"ultrathink"</code></p>
+                        </div>
+
+                        <h4>3. 利用子代理和并行处理</h4>
+                        <p>在复杂任务中使用子代理可以显著提高Claude的性能。特别是在对话或任务的早期阶段，指示Claude使用子代理来验证细节或调查特定问题。</p>
+                        
+                        <div class="code-header">
+                            <span>子代理使用示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>use subagents to verify the API documentation for the payment gateway before coding the integration</code></pre>
+
+                        <h4>4. 采用标准工作流程</h4>
+                        <p>Anthropic 工程师普遍采用的<strong>探索-规划-编码-提交</strong>工作流程非常有效：</p>
+                        
+                        <ol class="step-list">
+                            <li class="step"><strong>探索阶段：</strong>让Claude读取相关文件、图像或URL，但明确告诉它不要立即编写代码</li>
+                            <li class="step"><strong>规划阶段：</strong>要求Claude制定解决特定问题的计划，使用"think"触发词来获取更深入的思考</li>
+                            <li class="step"><strong>编码阶段：</strong>在确认计划合理后，让Claude实现解决方案</li>
+                            <li class="step"><strong>提交阶段：</strong>让Claude提交结果并创建拉取请求，同时更新相关文档或变更日志</li>
+                        </ol>
+
+                        <h4>5. 在 VSCode、Cursor 等 IDE 中使用 Claude Code</h4>
+                        <p>参考：<a href="https://docs.anthropic.com/zh-TW/docs/claude-code/ide-integrations" target="_blank">https://docs.anthropic.com/zh-TW/docs/claude-code/ide-integrations</a></p>
+                        
+                        <div class="tool-card">
+                            <div class="tool-title">🔧 支持的 IDE</div>
+                            <ul>
+                                <li><strong>Visual Studio Code</strong>（包括热门的分支版本如 Cursor 和 Windsurf）</li>
+                                <li><strong>JetBrains IDE</strong>（包括 PyCharm、WebStorm、IntelliJ 和 GoLand）</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-section">
+                            <div class="example-title">📋 使用流程</div>
+                            <ol>
+                                <li>开启 VSCode、Cursor</li>
+                                <li>在 IDE 的终端中执行 `claude` 命令后，claude code 扩展功能会自动安装</li>
+                                <li>在终端中，运行 `/ide` 命令也可以连接到 IDE</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div id="claude-cases">
+                        <h3>🚀 使用案例</h3>
+
+                        <h4>案例1：从头开始实现代码</h4>
+                        
+                        <h5>📊 从头实现简易代码</h5>
+                        <div class="example-section">
+                            <div class="example-title">💼 需求描述</div>
+                            <p>基于 python，支持以下功能：</p>
+                            <ul>
+                                <li>获取今天茅台股票的价格信息，画图展示一天中的价格走势图</li>
+                                <li>获取茅台股票的历史价格信息，画图展示天级别的价格走势图</li>
+                                <li>分析该股票现阶段是否值得购买</li>
+                                <li>生成的图片直接保存到同级目录下，不需要可视化</li>
+                            </ul>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/d4103e5653044f209e23eb7098554a29.png" alt="Claude Code任务规划">
+                            <div class="image-caption">Claude Code 首先会进行任务规划</div>
+                        </div>
+
+                        <div class="highlight-box">
+                            <h4>🎯 Claude Code 的工作步骤</h4>
+                            <ol>
+                                <li>检查当前目录结构和现有文件</li>
+                                <li>创建茅台股票分析的Python脚本</li>
+                                <li>实现今日价格数据获取和日内图表</li>
+                                <li>实现历史价格数据获取和日线图表</li>
+                                <li>实现投资建议的股票分析功能</li>
+                                <li>测试脚本并确保图像正确保存</li>
+                            </ol>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/de574fb57bbb4d0a8105b2f86a510978.png" alt="人工配合review">
+                            <div class="image-caption">中途可能 Claude Code 会需要人工配合 review 一些步骤</div>
+                        </div>
+
+                        <p>写完的代码发现运行会报错，看 Claude Code 的输出有提示是因为 yfinance 读取股票数据遇到了问题，于是给以下提示词，让 Claude Code 更换一个股票数据库：</p>
+                        
+                        <div class="code-header">
+                            <span>优化提示</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>能否换个库，不用 yfinance，用其他的库来获取股票数据</code></pre>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/07d3d1481b944585998fb993941ba4c5.png" alt="Claude Code库选择">
+                            <div class="image-caption">Claude Code 选择了 tushare 库，发现需要注册后又换成了 akshare 库</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/264183f53f7d4dd199d8d1a794c8a430.png" alt="费用提示">
+                            <div class="image-caption">同时会提醒这次运行代码花了多少钱</div>
+                        </div>
+
+                        <div class="success-box">
+                            这里的 5 美元应该是按照 Claude 的标准来计算的，如果是用 Kimi 的国产模型会便宜很多，大概 1-2 块人民币
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/f325818ac25a4c02998282ba853032c2.png" alt="运行结果">
+                            <div class="image-caption">写完了之后运行代码可以正常运行，这里代码给出了茅台的最新股价相关数据</div>
+                        </div>
+
+                        <p>但是这里画的图有点问题，图的标题和坐标轴的文字显示异常：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/6d1e199d0e0d48d28bea240144c731e9.png" alt="图片显示问题">
+                            <div class="image-caption">图片中的字没有正常显示</div>
+                        </div>
+
+                        <p>于是继续让 Claude Code 修复该问题：</p>
+                        
+                        <div class="code-header">
+                            <span>修复提示</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>这里图片中的字没有正常显示，怀疑是中文无法正确显示，修复该问题</code></pre>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/526be14495184142aa74898fc58d3e88.png" alt="修复后的图片1">
+                            <div class="image-caption">修复后能正常显示中文</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/9067c4623d0144d1aec6ff34959be8e9.png" alt="修复后的图片2">
+                            <div class="image-caption">茅台股票历史价格走势图</div>
+                        </div>
+
+                        <h5>🏗️ 从头实现复杂项目代码</h5>
+                        <div class="tool-card">
+                            <div class="tool-title">💡 建议</div>
+                            <p>因为 CLI 交互不太方便进行复杂的 prompt 输入，所以建议使用一个 markdown 文件对整个项目进行描述，对于很复杂的项目甚至可以每个模块都给一个详细的功能描述。</p>
+                        </div>
+
+                        <div class="example-section">
+                            <div class="example-title">📚 参考样例</div>
+                            <p>Claude Code 的逆向工程研究：<a href="https://github.com/shareAI-lab/analysis_claude_code" target="_blank">https://github.com/shareAI-lab/analysis_claude_code</a></p>
+                            <p>给项目进行整体的功能描述，准备步骤和实施步骤都尽量详细的描述清楚</p>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/df4a3745d9a84ca99c17745c2828cefa.png" alt="项目描述1">
+                            <div class="image-caption">项目整体功能描述</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/897712ffefe445619ab780b2cd05fe19.png" alt="项目描述2">
+                            <div class="image-caption">准备步骤详细描述</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/eb918f2260bb4055a29680aaa024d3e2.png" alt="项目描述3">
+                            <div class="image-caption">实施步骤详细描述</div>
+                        </div>
+
+                        <h4>案例2：辅助代码库学习</h4>
+                        <div class="example-section">
+                            <div class="example-title">🗺️ 生成架构图</div>
+                            <p>让 Claude Code 把代码库的架构整体性画一个 mermaid 图，方便第一次接触这个代码的人了解代码库的整体架构：</p>
+                        </div>
+
+                        <div class="code-header">
+                            <span>提示词</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>把代码库的架构整体性画一个 mermaid 图，方便第一次接触这个代码的人了解代码库的整体架构，mermaid 图输出结果保存到 megatron_mermaid.md</code></pre>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/04f1483160bb4530aeb886150e897385.png" alt="生成架构图1">
+                            <div class="image-caption">Claude Code 分析代码库架构</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/5aacb6dbd9014072886c3527dfcd74d7.png" alt="生成架构图2">
+                            <div class="image-caption">生成的 mermaid 架构图代码</div>
+                        </div>
+
+                        <p>模型生成的 mermaid 上传到 <a href="https://www.mermaidchart.com/play?utm_source=mermaid_js#pako:eNqrVkrOT0lVslJSqgUAFW4DVg" target="_blank">mermaidchart</a> 中可以看到代码库的高级架构图示：</p>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/3b47089bb1994637b7ee6ed5b0dd20f6.png" alt="架构图可视化1">
+                            <div class="image-caption">代码库高级架构图</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/e8228f51e6f4431299dfd5f9b20aee36.png" alt="架构图可视化2">
+                            <div class="image-caption">更细节层面的模块构成</div>
+                        </div>
+
+                        <h4>案例3：在已有代码库基础上修改代码</h4>
+                        <p>在给定的 framework 上 fix issue 或者 add new feature 是比起从头写一个 framework 更加真实的需求。</p>
+
+                        <div class="example-section">
+                            <div class="example-title">🔧 使用流程</div>
+                            <ol>
+                                <li>运行 `/init` 创建 CLAUDE.md 文件，Claude Code 会阅读当前代码库的代码</li>
+                                <li>生成的 CLAUDE.md 文件包含了 Claude Code 对于当前代码库的理解</li>
+                                <li>在后续编写代码的时候能更快速的实现功能</li>
+                            </ol>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/06c98948705042969a395c278c48063a.png" alt="初始化代码库1">
+                            <div class="image-caption">运行 /init 命令</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/cf69e81e533f4743847ab5075e15f701.png" alt="初始化代码库2">
+                            <div class="image-caption">生成的 CLAUDE.md 文件内容</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="gemini-cli">
+                    <h2>💎 Gemini CLI</h2>
+                    
+                    <div id="gemini-install">
+                        <h3>📦 安装流程</h3>
+                        
+                        <div class="tool-card">
+                            <div class="tool-title">🌟 Gemini CLI 介绍</div>
+                            <p>参考：<a href="https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/" target="_blank">https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/</a></p>
+                            <ul>
+                                <li>对于开发者来说，命令行界面 (CLI) 不仅仅是一个工具，更是他们的家</li>
+                                <li>将 Gemini 的强大功能直接带入终端</li>
+                                <li><strong>预览版免费体验：</strong>每分钟 60 个模型请求，每天 1,000 个请求，均免费（Google 大气）</li>
+                            </ul>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/e5a2c7a97b1f457da5a21a6598905c0f.png" alt="Gemini CLI介绍">
+                            <div class="image-caption">Gemini CLI 官方介绍</div>
+                        </div>
+
+                        <h4>第一步：安装 Gemini CLI</h4>
+                        <div class="code-header">
+                            <span>npm 安装命令</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>npm install -g @google/gemini-cli</code></pre>
+
+                        <h4>第二步：启动和配置</h4>
+                        <p>直接在终端输入 `gemini` 即可开启：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/414bb8a7cc2d425892cf2aa1f9cb8838.png" alt="Gemini CLI启动">
+                            <div class="image-caption">Gemini CLI 启动界面</div>
+                        </div>
+
+                        <p>主题一般选择默认：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/4c7d5ba76e5e4705adb12939856f4b30.png" alt="Gemini CLI主题选择">
+                            <div class="image-caption">主题选择界面</div>
+                        </div>
+
+                        <h4>第三步：账号登录</h4>
+                        <p>一般个人使用选择 google 账号登录（注意这里登录可能需要科学上网），会自动跳转到 google 的登录界面，登录后即可开始使用：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/8e65ecde0a194dcfbf199e2bc95af076.png" alt="Gemini CLI登录">
+                            <div class="image-caption">Google 账号登录界面</div>
+                        </div>
+
+                        <div class="success-box">
+                            另外在 ssh 的服务器上的登录 google 一样是支持的，点击 gemini 终端提供的链接进行 google 账号认证即可
+                        </div>
+                    </div>
+
+                    <div id="gemini-features">
+                        <h3>✨ 功能特点</h3>
+                        
+                        <div class="feature-card">
+                            <h4>🆓 免费使用</h4>
+                            <p>预览版提供丰富的免费额度，对个人开发者非常友好</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>🔗 无缝集成</h4>
+                            <p>直接在命令行中使用 Google 的先进 AI 技术</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>🌐 云端同步</h4>
+                            <p>与 Google 账号绑定，可在多设备间同步使用</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>⚡ 快速响应</h4>
+                            <p>基于 Gemini 模型的快速响应和高质量输出</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="qwen-code">
+                    <h2>🇨🇳 Qwen Code</h2>
+                    
+                    <div id="qwen-install">
+                        <h3>📦 快速上手</h3>
+                        
+                        <div class="tool-card">
+                            <div class="tool-title">🚀 Qwen3 Code 介绍</div>
+                            <p>官方博客：<a href="https://qwenlm.github.io/zh/blog/qwen3-coder/" target="_blank">https://qwenlm.github.io/zh/blog/qwen3-coder/</a></p>
+                        </div>
+
+                        <h4>第一步：安装 Qwen Code</h4>
+                        <div class="code-header">
+                            <span>npm 安装命令</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>npm i -g @qwen-code/qwen-code</code></pre>
+
+                        <h4>第二步：获取 API Key</h4>
+                        <p>前往 <a href="https://bailian.console.aliyun.com/#/home" target="_blank">https://bailian.console.aliyun.com/#/home</a> 获取 API Key</p>
+
+                        <h4>第三步：设置环境变量</h4>
+                        <div class="code-header">
+                            <span>环境变量设置</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>export OPENAI_API_KEY="your_api_key_here"
+export OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
+export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
+
+                        <h4>第四步：启动 Qwen Code</h4>
+                        <p>在终端输入 `qwen` 即可启动</p>
+                    </div>
+
+                    <div id="qwen-advantages">
+                        <h3>🌟 优势特色</h3>
+                        
+                        <div class="feature-card">
+                            <h4>🏠 国产化优势</h4>
+                            <p>阿里云出品，对中文支持更好，服务稳定可靠</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>💰 价格优势</h4>
+                            <p>相比国外服务，价格更加亲民，适合国内开发者</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>🔧 专业编程</h4>
+                            <p>专门针对编程场景优化的模型，代码质量更高</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>📶 访问稳定</h4>
+                            <p>国内访问速度快，无需担心网络连接问题</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="codex">
+                    <h2>⚡ OpenAI Codex</h2>
+                    
+                    <div id="codex-usage">
+                        <h3>🎯 使用方式</h3>
+                        
+                        <div class="tool-card">
+                            <div class="tool-title">🤖 Codex 介绍</div>
+                            <p>官网博客：<a href="https://openai.com/index/introducing-codex/" target="_blank">https://openai.com/index/introducing-codex/</a></p>
+                        </div>
+
+                        <h4>第一步：访问 ChatGPT 官网</h4>
+                        <p>访问 <a href="https://chatgpt.com/" target="_blank">https://chatgpt.com/</a> 侧边栏点击 Codex</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/8cfc0b9021a34432a7625179d1d3d64e.png" alt="Codex入口">
+                            <div class="image-caption">ChatGPT 侧边栏中的 Codex 入口</div>
+                        </div>
+
+                        <h4>第二步：开始使用</h4>
+                        <p>点击开始使用</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/da04d52e9a8043e787d8ed33a0341ef1.png" alt="Codex开始页面">
+                            <div class="image-caption">Codex 开始使用页面</div>
+                        </div>
+
+                        <h4>第三步：连接到 GitHub</h4>
+                        <p>连接到 GitHub，可以选择一个自己的仓库作为初始环境</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/5545eb8e367b454a9bdaeb5a549c88b9.png" alt="GitHub连接">
+                            <div class="image-caption">连接 GitHub 仓库</div>
+                        </div>
+                    </div>
+
+                    <div id="codex-workflow">
+                        <h3>⚙️ 工作流程</h3>
+                        
+                        <p>根据我们上一步给定的代码库，这里 Codex 会给出一些任务建议作为启动任务感受一下：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/500ba5feb76b4357952e762b05420638.png" alt="任务建议">
+                            <div class="image-caption">Codex 提供的任务建议</div>
+                        </div>
+
+                        <p>点击开启后会自动开始这三个任务：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/7d91fd56b6054aa3a2e6cce06bd5da23.png" alt="任务执行">
+                            <div class="image-caption">任务执行界面</div>
+                        </div>
+
+                        <p>点击正在运行的任务可以看到 Agent 是正在如何处理任务的：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/5d5651121f264a89b2240c1dff60bb31.png" alt="任务处理过程">
+                            <div class="image-caption">Agent 处理任务的过程</div>
+                        </div>
+
+                        <p>任务完成后可以查看完成的结果：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/06558e05e6fa439cad21743ab13169cc.png" alt="任务完成结果1">
+                            <div class="image-caption">任务完成结果页面1</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/8564a11da71549de9e21d2c23244c6ad.png" alt="任务完成结果2">
+                            <div class="image-caption">任务完成结果页面2</div>
+                        </div>
+
+                        <p>点击以下的"已工作 x 分 x 秒"可以查看完整的工作日志：</p>
+                        
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/f1a9b47db9d549fc9a47448058595f90.png" alt="工作日志">
+                            <div class="image-caption">完整的工作日志</div>
+                        </div>
+
+                        <div class="success-box">
+                            感觉这个写得整体架构和学习建议还不错，于是我让 Codex 直接提交一个 PR 来上传这部分内容，任务完成后需要点击右上角的按钮来确认是否需要上传
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/bb1070274ac04b9e8f0081dd85771183.png" alt="PR提交">
+                            <div class="image-caption">点击后这个按钮会变成查看 PR</div>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="https://i-blog.csdnimg.cn/direct/e24a77c09b2a4974af4bb021d88b4d7a.png" alt="PR查看">
+                            <div class="image-caption">点击"查看PR"即可看到这个内容被正常上传了</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="comparison">
+                    <h2>📊 工具对比与总结</h2>
+                    
+                    <div class="tool-card">
+                        <div class="tool-title">🏆 各工具特色对比</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>工具</th>
+                                    <th>主要优势</th>
+                                    <th>适用场景</th>
+                                    <th>价格</th>
+                                    <th>易用性</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Claude Code</strong></td>
+                                    <td>强大的上下文理解，优秀的代码生成质量</td>
+                                    <td>复杂项目开发，代码重构</td>
+                                    <td>较高（可用Kimi替代）</td>
+                                    <td>⭐⭐⭐⭐⭐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gemini CLI</strong></td>
+                                    <td>免费额度丰富，Google生态整合</td>
+                                    <td>个人学习，小项目开发</td>
+                                    <td>免费（预览版）</td>
+                                    <td>⭐⭐⭐⭐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Qwen Code</strong></td>
+                                    <td>国产化，中文支持好，价格亲民</td>
+                                    <td>国内开发者，中文项目</td>
+                                    <td>较低</td>
+                                    <td>⭐⭐⭐⭐</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>OpenAI Codex</strong></td>
+                                    <td>GitHub集成，自动化工作流</td>
+                                    <td>团队协作，自动化任务</td>
+                                    <td>中等</td>
+                                    <td>⭐⭐⭐⭐⭐</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>🎯 选择建议</h3>
+                    
+                    <div class="feature-card">
+                        <h4>🏢 企业级开发</h4>
+                        <p>推荐使用 <strong>Claude Code</strong>，具有最强的代码理解和生成能力，适合复杂项目</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>👨‍🎓 个人学习</h4>
+                        <p>推荐使用 <strong>Gemini CLI</strong>，免费额度充足，适合学习和小项目练手</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🇨🇳 国内开发者</h4>
+                        <p>推荐使用 <strong>Qwen Code</strong>，访问稳定，中文支持好，价格合理</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>👥 团队协作</h4>
+                        <p>推荐使用 <strong>OpenAI Codex</strong>，与GitHub深度集成，适合团队开发流程</p>
+                    </div>
+                </section>
+
+                <section id="summary">
+                    <h2>🎯 总结与展望</h2>
+                    
+                    <div class="highlight-box">
+                        <h4>🌟 Vibe Coding 的核心价值</h4>
+                        <p>Vibe Coding 代表了编程方式的革命性转变，从传统的"手写代码"转向"意图驱动的AI协作"。这不仅仅是工具的升级，更是编程思维模式的根本性改变。</p>
+                    </div>
+
+                    <h3>🚀 未来发展趋势</h3>
+                    
+                    <div class="feature-card">
+                        <h4>📈 AI能力持续提升</h4>
+                        <p>随着大语言模型的不断进步，AI的代码理解和生成能力将越来越强</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🔗 工具生态完善</h4>
+                        <p>更多AI编程工具的出现，以及它们与现有开发工具的深度集成</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>👨‍💻 开发者角色转变</h4>
+                        <p>开发者将更多专注于产品设计、架构规划和用户体验，而非具体的代码实现</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🌍 编程门槛降低</h4>
+                        <p>更多非技术背景的人员也能通过AI工具参与到软件开发中来</p>
+                    </div>
+
+                    <h3>💡 最佳实践建议</h3>
+                    
+                    <ol class="step-list">
+                        <li class="step"><strong>明确表达需求：</strong>清晰、具体地描述你想要实现的功能</li>
+                        <li class="step"><strong>迭代优化：</strong>根据AI的输出结果，不断调整和优化需求描述</li>
+                        <li class="step"><strong>保持学习：</strong>虽然不需要深入每个技术细节，但保持对技术趋势的了解</li>
+                        <li class="step"><strong>质量把控：</strong>AI生成的代码仍需要人工审查和测试</li>
+                        <li class="step"><strong>安全意识：</strong>注意AI生成代码的安全性，特别是涉及敏感信息的部分</li>
+                    </ol>
+
+                    <div class="warning-box">
+                        <strong>重要提醒：</strong>虽然 Vibe Coding 大大提高了开发效率，但开发者仍需要具备基本的编程知识和判断能力，以确保生成的代码质量和安全性。
+                    </div>
+
+                    <div class="success-box">
+                        <strong>拥抱变化：</strong>Vibe Coding 代表了编程的未来方向。现在就开始学习和使用这些AI工具，将帮助你在即将到来的AI编程时代中保持竞争优势！
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <script>
+        // 移动菜单切换
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 90,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 如果是移动菜单，点击后关闭
+                    if (navLinks && navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // 返回顶部按钮
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        if (backToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+        }
+
+        // 代码复制功能
+        const copyBtns = document.querySelectorAll('.copy-btn');
+        
+        copyBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const codeBlock = btn.closest('.code-header').nextElementSibling;
+                if (codeBlock && codeBlock.tagName === 'PRE') {
+                    const code = codeBlock.textContent;
+                    
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = btn.textContent;
+                        btn.textContent = '已复制!';
+                        btn.style.background = 'var(--success)';
+                        
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.style.background = '';
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('复制失败:', err);
+                        btn.textContent = '复制失败';
+                        btn.style.background = 'var(--danger)';
+                        
+                        setTimeout(() => {
+                            btn.textContent = '复制';
+                            btn.style.background = '';
+                        }, 2000);
+                    });
+                }
+            });
+        });
+
+        // 改进的目录高亮功能
+        function initTocHighlight() {
+            const sections = document.querySelectorAll('section[id], div[id]');
+            const tocLinks = document.querySelectorAll('.toc-list a[href^="#"]');
+            
+            function highlightTocItem() {
+                let current = '';
+                const scrollPos = window.pageYOffset + 150; // 添加偏移量
+                
+                // 找到当前在视口中的section
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionBottom = sectionTop + sectionHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                // 如果在页面顶部，高亮第一个链接
+                if (scrollPos < 200) {
+                    current = 'concept';
+                }
+                
+                // 如果在页面底部，高亮最后一个链接
+                if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100) {
+                    current = 'summary';
+                }
+                
+                // 更新高亮状态
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            // 初始化时执行一次
+            highlightTocItem();
+            
+            // 滚动时执行
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        highlightTocItem();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTocHighlight();
+        });
+    </script>
+</body>
+</html> 

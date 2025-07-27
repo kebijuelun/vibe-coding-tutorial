@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大模型编程能力评估：算法与工程的全面对比</title>
+    <style>
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #edf2f7;
+            --text-secondary: #a0aec0;
+            --accent: #9f7aea;
+            --accent-light: #b794f6;
+            --code-bg: #1a202c;
+            --border: #2d3748;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --warning: #f6ad55;
+            --success: #68d391;
+            --danger: #fc8181;
+            --info: #63b3ed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 900px;
+            margin: 0 auto 2rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+            background-color: var(--bg-tertiary);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            color: var(--accent-light);
+        }
+
+        h4 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem 0;
+            color: var(--info);
+        }
+
+        h5 {
+            font-size: 1.2rem;
+            margin: 1rem 0 0.5rem 0;
+            color: var(--warning);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        tr:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        /* Image Styles */
+        .image-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .image-caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Code Styles */
+        pre, code {
+            background: var(--code-bg);
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+        }
+
+        pre {
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+        }
+
+        code {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow);
+        }
+
+        .card h4 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        /* Status badges */
+        .status-success {
+            background: var(--success);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-failed {
+            background: var(--danger);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-partial {
+            background: var(--warning);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Star ratings */
+        .star-rating {
+            color: var(--warning);
+            font-size: 1.2rem;
+        }
+
+        /* Links */
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--accent-light);
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .toc ul {
+            margin-left: 1rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="highlight-badge">🚀 AI编程能力深度评测</div>
+            <h1>大模型编程能力评估</h1>
+            <p class="subtitle">基于LiveCodeBench、SWE-Bench榜单与自定义测试案例的全面对比分析</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#introduction">引言</a></li>
+                <li><a href="#benchmarks">公开榜单</a></li>
+                <li><a href="#custom-tests">自测样例</a></li>
+                <li><a href="#comparison">模型对比</a></li>
+                <li><a href="#conclusion">结语</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 目录 -->
+        <div class="toc">
+            <h3>📋 目录</h3>
+            <ul>
+                <li><a href="#introduction">引言</a></li>
+                <li><a href="#benchmarks">了解大模型的代码能力</a>
+                    <ul>
+                        <li><a href="#livecode">LiveCodeBench: 测试算法能力</a></li>
+                        <li><a href="#swebench">SWE-Bench: 测试工程能力</a></li>
+                    </ul>
+                </li>
+                <li><a href="#custom-tests">自测样例</a>
+                    <ul>
+                        <li><a href="#ball-test">经典小球测试样例</a></li>
+                        <li><a href="#triton-test">Triton 算子编写测试案例</a></li>
+                    </ul>
+                </li>
+                <li><a href="#comparison">模型能力总结对比</a></li>
+                <li><a href="#conclusion">结语</a></li>
+            </ul>
+        </div>
+
+        <!-- 引言 -->
+        <section id="introduction" class="section">
+            <h2>🎯 引言</h2>
+            <p>随着大语言模型（LLM）的迅速发展，越来越多的模型被用于辅助甚至主导编程任务。然而，大模型究竟在代码能力方面达到了怎样的水平？它们是否适合实际的软件工程场景？哪些模型更适合算法问题，哪些则在工程实现方面更为擅长？</p>
+            
+            <p>本文围绕大模型的<strong>编程能力评估</strong>展开，结合两个具有代表性的公开评测榜单（LiveCodeBench 和 SWE-Bench），并以两个自构造的典型测试样例（小球物理模拟 + Triton 算子实现）作为补充，实测多个主流大模型的表现，包括 GPT-4o、Claude Sonnet 4、Gemini 2.5 Pro、Kimi K2、DeepSeek R1、豆包、Qwen3-235B 等。</p>
+        </section>
+
+        <!-- 公开榜单 -->
+        <section id="benchmarks" class="section">
+            <h2>📊 了解大模型的代码能力</h2>
+            
+            <h3 id="livecode">🏆 LiveCodeBench: 测试算法能力</h3>
+            <p>LiveCodeBench 是由加州大学伯克利分校、麻省理工学院和康奈尔大学的研究人员开发的先进评测基准。通过从 LeetCode、AtCoder 和 CodeForces 等竞赛平台实时收集新发布的编程问题，确保评测的无污染性（仅使用模型训练截止日期之后发布的问题），并涵盖代码生成、代码自修复（基于反馈调试代码）、代码执行以及测试输出预测等多种代码相关能力。</p>
+            
+            <p><strong>Leaderboards 网址：</strong> <a href="https://livecodebench.github.io/leaderboard.html" target="_blank">https://livecodebench.github.io/leaderboard.html</a></p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h4>7/1/2024 - 2/1/2025 榜单</h4>
+                    <div class="image-container">
+                        <img src="./images/livecode-bench-1.png" alt="LiveCodeBench 7月-2月榜单" style="max-height: 400px;">
+                        <div class="image-caption">LiveCodeBench 2024年7月至2025年2月榜单排名</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>8/1/2024 - 5/1/2025 榜单</h4>
+                    <div class="image-container">
+                        <img src="./images/livecode-bench-2.png" alt="LiveCodeBench 8月-5月榜单" style="max-height: 400px;">
+                        <div class="image-caption">LiveCodeBench 2024年8月至2025年5月榜单排名</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="swebench">🔧 SWE-Bench: 测试工程能力</h3>
+            <p>SWE-Bench（Software Engineering Benchmark）是由普林斯顿大学 NLP 团队于 2023 年 10 月提出，旨在评估大语言模型（LLM）解决真实软件工程问题（如 bug 修复和功能改进）的能力，而非传统算法题解决能力。</p>
+            
+            <ul>
+                <li>从 12 个流行的开源 Python 仓库中收集了 2,294 个任务实例，每个任务基于 GitHub issue 和对应 Pull Request（PR），要求模型生成代码补丁以解决问题，并通过仓库测试套件验证补丁的正确性</li>
+                <li>SWE-Bench 被认为是最具挑战性的编程基准之一，因为它模拟了真实软件开发中的复杂场景</li>
+            </ul>
+            
+            <p><strong>Leaderboards 网址：</strong> <a href="https://www.swebench.com/index.html" target="_blank">https://www.swebench.com/index.html</a></p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h4>📈 Claude 的功能能力很强</h4>
+                    <div class="image-container">
+                        <img src="./images/swe-bench-claude.png" alt="SWE-Bench Claude表现" style="max-height: 400px;">
+                        <div class="image-caption">Claude 在 SWE-Bench 上的优异表现</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>📉 开源模型仍有差距</h4>
+                    <div class="image-container">
+                        <img src="./images/swe-bench-open.png" alt="SWE-Bench 开源模型表现" style="max-height: 400px;">
+                        <div class="image-caption">开源模型距离闭源模型还有一定差距</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 自测样例 -->
+        <section id="custom-tests" class="section">
+            <h2>🧪 自测样例</h2>
+            
+            <h3 id="ball-test">⚽ 经典小球测试样例</h3>
+            <p>该样例可以方便测试人员肉眼观察代码实现效果，不需要懂代码的人也能通过代码运行结果来直观体会到模型的代码撰写能力。不过注意这个测试样例主要是用于简单验证大模型的代码编程能力，只能作为初步判断，不一定能完全体现出模型的能力。</p>
+            
+            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <p><strong>🎯 测试Prompt：</strong></p>
+                <p><em>编写一个 html 代码，模拟一个小球在匀速旋转的六边形内部弹跳的物理效果（包括重力、碰撞反作用力、摩擦力等）。球应该受到重力，在碰到六边形的内壁后会回弹，受到碰撞反作用力、摩擦力的影响。注意球的初始化位置在六边形内部的中心。</em></p>
+            </div>
+            
+            <p><strong>⚠️ 注意事项：</strong></p>
+            <ul>
+                <li>这里所有测试都取第一次的结果，不代表模型能达到的最优效果。比如 Kimi K2 模型在第一次运行失败，第二次运行成功</li>
+                <li>这个测试样例比较经典，不排除有部分模型会针对这个测试样例专门进行优化，所以能完成这个测试样例不代表模型能力一定很强，只能说至少应该是在基本能用的水平以上</li>
+            </ul>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h5>Claude Sonnet 4</h5>
+                    <p>基本合理，还额外增加了一些功能，比如增加小球和去掉小球</p>
+                    <div class="image-container">
+                        <img src="./images/claude-ball.gif" alt="Claude Sonnet 4 小球测试结果">
+                        <div class="image-caption">Claude Sonnet 4 - 基本合理，功能丰富</div>
+                    </div>
+                    <span class="status-success">✅ 优秀</span>
+                </div>
+
+                <div class="card">
+                    <h5>GPT-4o</h5>
+                    <p>完全错了，小球跳出了六边形</p>
+                    <div class="image-container">
+                        <img src="./images/gpt4o-ball.gif" alt="GPT-4o 小球测试结果">
+                        <div class="image-caption">GPT-4o - 小球跳出六边形</div>
+                    </div>
+                    <span class="status-failed">❌ 失败</span>
+                </div>
+
+                <div class="card">
+                    <h5>GPT o4-mini-high</h5>
+                    <p>基本合理</p>
+                    <div class="image-container">
+                        <img src="./images/gpt4o-mini-ball.gif" alt="GPT o4-mini-high 小球测试结果">
+                        <div class="image-caption">GPT o4-mini-high - 基本合理</div>
+                    </div>
+                    <span class="status-success">✅ 良好</span>
+                </div>
+
+                <div class="card">
+                    <h5>Grok 4</h5>
+                    <p>完全错了，六边形都没有成功画出来</p>
+                    <div class="image-container">
+                        <img src="./images/grok4-ball.gif" alt="Grok 4 小球测试结果">
+                        <div class="image-caption">Grok 4 - 六边形绘制失败</div>
+                    </div>
+                    <span class="status-failed">❌ 失败</span>
+                </div>
+
+                <div class="card">
+                    <h5>Gemini 2.5 Pro</h5>
+                    <p>六边形正确生成，但是没有生成小球</p>
+                    <div class="image-container">
+                        <img src="./images/gemini-ball.gif" alt="Gemini 2.5 Pro 小球测试结果">
+                        <div class="image-caption">Gemini 2.5 Pro - 缺少小球</div>
+                    </div>
+                    <span class="status-failed">❌ 未生成小球</span>
+                </div>
+
+                <div class="card">
+                    <h5>Kimi K2</h5>
+                    <p>物理规律还行，不过六边形没有旋转。再给 kimi 一次机会，可以正确做对</p>
+                    <div class="image-container">
+                        <img src="./images/kimi-ball-1.gif" alt="Kimi K2 第一次测试结果">
+                        <div class="image-caption">Kimi K2 第一次 - 六边形未旋转</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="./images/kimi-ball-2.gif" alt="Kimi K2 第二次测试结果">
+                        <div class="image-caption">Kimi K2 第二次 - 成功</div>
+                    </div>
+                    <span class="status-success">✅ 良好（需重试）</span>
+                </div>
+
+                <div class="card">
+                    <h5>DeepSeek R1</h5>
+                    <p>物理规律还行，不过后面小球跳出六边形还是算失败了。给 deepseek 第二次机会，物理规律依然还不错，但是球还是跳出六边形了</p>
+                    <div class="image-container">
+                        <img src="./images/deepseek-ball-1.gif" alt="DeepSeek R1 第一次测试结果">
+                        <div class="image-caption">DeepSeek R1 第一次 - 小球跳出</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="./images/deepseek-ball-2.gif" alt="DeepSeek R1 第二次测试结果">
+                        <div class="image-caption">DeepSeek R1 第二次 - 仍然跳出</div>
+                    </div>
+                    <span class="status-failed">❌ 物理出界</span>
+                </div>
+
+                <div class="card">
+                    <h5>豆包</h5>
+                    <p>基本符合预期</p>
+                    <div class="image-container">
+                        <img src="./images/doubao-ball-1.gif" alt="豆包第一次测试结果">
+                        <div class="image-caption">豆包 第一次 - 基本合理</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="./images/doubao-ball-2.gif" alt="豆包第二次测试结果">
+                        <div class="image-caption">豆包 第二次 - 持续稳定</div>
+                    </div>
+                    <span class="status-success">✅ 良好</span>
+                </div>
+            </div>
+
+            <h3 id="triton-test">⚡ Triton 算子编写测试案例</h3>
+            
+            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <p><strong>🎯 测试Prompt：</strong></p>
+                <p><em>请你用 Triton 从零实现一个与 torch.nn.functional.layer_norm 完全等价的前向算子，并编写相应的测试与基准验证脚本。</em></p>
+                <ul>
+                    <li>实现 layernorm_triton(x, weight, bias, eps=1e-5)，与 torch.nn.functional.layer_norm(x, [x.size(-1)], weight, bias, eps) 在数值上逐元素一致（CUDA 张量输入／输出）</li>
+                    <li>主函数中测试多组输入形状 (使用 [32,1024]、[64,4096]、[8,16384]）及三种数据类型：float32、float16、bfloat16，打印绝对误差和相对误差，判断实现是否正确（验证 max_abs_error < 2e-2，mean_abs_error < 1e-2）</li>
+                    <li>主函数中同时测量在形状 [64,4096] 输入下，分别调用 Triton 实现与 PyTorch 原生 layer_norm 各 100 次的平均耗时（使用 torch.cuda.Event）</li>
+                    <li>所有代码写到一个脚本里，结果打印尽量简洁</li>
+                </ul>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h5>GPT o4-mini-high</h5>
+                    <p>生成代码完成度（算子实现、测试样例）和正确性都符合预期。（毕竟 Triton 是 OpenAI 开发的，要是这都写不出来就有点尴尬了...）</p>
+                    <div class="image-container">
+                        <img src="./images/gpt4o-mini-triton.png" alt="GPT o4-mini-high Triton测试结果">
+                        <div class="image-caption">GPT o4-mini-high - Triton实现成功</div>
+                    </div>
+                    <span class="status-success">✅ 优秀</span>
+                </div>
+
+                <div class="card">
+                    <h5>Claude Sonnet 4</h5>
+                    <p>能正确完成</p>
+                    <div class="image-container">
+                        <img src="./images/claude-triton.png" alt="Claude Sonnet 4 Triton测试结果">
+                        <div class="image-caption">Claude Sonnet 4 - 实现正确</div>
+                    </div>
+                    <span class="status-success">✅ 优秀</span>
+                </div>
+
+                <div class="card">
+                    <h5>Kimi K2</h5>
+                    <p>可以正确完成</p>
+                    <div class="image-container">
+                        <img src="./images/kimi-triton.png" alt="Kimi K2 Triton测试结果">
+                        <div class="image-caption">Kimi K2 - 可以完成</div>
+                    </div>
+                    <span class="status-success">✅ 可完成</span>
+                </div>
+
+                <div class="card">
+                    <h5>Qwen3-235B-A22B</h5>
+                    <p>第一次运行遇到报错：<code>AttributeError: module 'triton' has no attribute 'next_power_of_two'. Did you mean: 'next_power_of_2'?</code></p>
+                    <p>将报错给 Qwen 后重新写，还是没有修复：<code>AttributeError: module 'triton.language' has no attribute 'next_power_of_2'</code></p>
+                    <span class="status-failed">❌ 调用报错</span>
+                </div>
+
+                <div class="card">
+                    <h5>DeepSeek R1</h5>
+                    <p>第一次运行报错：<code>ValueError: too many values to unpack (expected 2)</code></p>
+                    <p>第二次运行正确</p>
+                    <div class="image-container">
+                        <img src="./images/deepseek-triton.png" alt="DeepSeek R1 Triton测试结果">
+                        <div class="image-caption">DeepSeek R1 - 第二次成功</div>
+                    </div>
+                    <span class="status-success">✅ 需重试</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模型对比 -->
+        <section id="comparison" class="section">
+            <h2>📈 模型能力总结对比</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>模型名称</th>
+                            <th>算法能力（LiveCodeBench）</th>
+                            <th>工程能力（SWE-Bench）</th>
+                            <th>小球物理模拟</th>
+                            <th>Triton 算子实现</th>
+                            <th>总体表现简评</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Claude Sonnet 4</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+                            <td><span class="status-success">✅优秀</span></td>
+                            <td><span class="status-success">✅优秀</span></td>
+                            <td>工程能力最强，综合表现非常稳定</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GPT-4o</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="status-failed">❌失败</span></td>
+                            <td><span class="status-success">✅优秀</span></td>
+                            <td>算法能力最强，但偶尔会出现行为偏差</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GPT o4-mini-high</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="status-success">✅良好</span></td>
+                            <td><span class="status-success">✅优秀</span></td>
+                            <td>表现稳定，生成代码质量高</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gemini 2.5 Pro</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐</span></td>
+                            <td><span class="status-failed">❌未生成小球</span></td>
+                            <td><span class="status-partial">✅（有一定能力）</span></td>
+                            <td>知识储备丰富，但在物理模拟中稍弱</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kimi K2</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="status-success">✅良好（需重试）</span></td>
+                            <td><span class="status-success">✅（可完成）</span></td>
+                            <td>可用性较高，第二次生成成功率更高</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Deepseek R1</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="status-failed">❌物理出界</span></td>
+                            <td><span class="status-success">✅（需重试）</span></td>
+                            <td>性能尚可，但稳定性略差</td>
+                        </tr>
+                        <tr>
+                            <td><strong>豆包</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="status-success">✅良好</span></td>
+                            <td>未测试</td>
+                            <td>工程能力出色，小模型中表现优秀</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Qwen3-235B</strong></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td><span class="star-rating">⭐⭐⭐⭐</span></td>
+                            <td>未测试</td>
+                            <td><span class="status-failed">❌调用报错</span></td>
+                            <td>有潜力，但细节实现不够稳健</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 结语 -->
+        <section id="conclusion" class="section">
+            <h2>🎓 结语</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h4>🎯 如何挑选适合的大模型</h4>
+                    <ul>
+                        <li><strong>查看公开 benchmark 榜单</strong>：找性能最好的模型</li>
+                        <li><strong>构造技术领域测试样例</strong>：简单测试确认模型性能</li>
+                        <li><strong>多模型组合使用</strong>：不同场景选择最优模型</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>💡 主流模型选择经验</h4>
+                    <ul>
+                        <li><strong>Claude 4 Opus/Sonnet</strong>：写代码第一选择，工程能力强，使用范围广</li>
+                        <li><strong>GPT o3</strong>：算法能力强，难度很高的某些代码只有 GPT o3 能写出来，比如根据论文中提出的新方案公式来实现对应的代码</li>
+                        <li><strong>Gemini 2.5 Pro</strong>：知识储备大，长文本能力强，跨模态理解需求</li>
+                        <li><strong>国内模型</strong>：目前 DeepSeek R1 和 Kimi K2 算是代码能力偏强的一档，但是和 Claude 模型还有一定差距</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p>不同的大模型侧重点不一样，所以不同的技术领域最优的大模型可能是不同的，最好能同时使用多个大模型。结合 benchmark 榜单和自定义测试，是评估模型真实可用性的最佳方式（榜单不完全可信，还是需要自己验证）。</p>
+            
+            <p>现阶段一定有人能解决但是所有大模型都无法解决的难题，我们需要提前了解大模型的能力边界。但是一定要相信，这些问题未来大模型一定能支持。<strong>大模型的能力迭代速度远快于人的学习提升速度</strong>。</p>
+        </section>
+    </main>
+</body>
+</html> 

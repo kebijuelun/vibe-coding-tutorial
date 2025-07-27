@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor：AI驱动的代码编辑器全指南</title>
+    <style>
+        :root {
+            --bg-primary: #1e1e2e;
+            --bg-secondary: #272744;
+            --bg-tertiary: #3b3b69;
+            --text-primary: #e2e2e2;
+            --text-secondary: #a1a1aa;
+            --accent: #5e6ad2;
+            --accent-light: #7c83ee;
+            --code-bg: #2b2b42;
+            --border: #4b4b6d;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        nav {
+            background-color: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            width: 280px;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .toc {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .toc h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-list a {
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent);
+        }
+
+        .toc-list .toc-subitem {
+            padding-left: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.9rem;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }
+
+        .copy-btn:hover {
+            color: var(--accent);
+        }
+
+        .feature-card {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        .feature-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                margin-bottom: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-secondary);
+                padding: 1rem 0;
+                box-shadow: 0 4px 12px var(--shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            main {
+                padding: 0 1rem;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 60%, rgba(94, 106, 210, 0.2) 40%);
+            padding: 0 0.2rem;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-section {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-title {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-bg"></div>
+        <div class="header-content">
+            <h1>Cursor：AI驱动的代码编辑器全指南</h1>
+            <p class="subtitle">探索如何通过Cursor的智能功能显著加速开发流程，从代码补全到聊天交互，再到代理模式，掌握这款革命性工具的核心能力。</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Cursor Guide</div>
+            <button class="mobile-menu-btn">☰</button>
+            <ul class="nav-links">
+                <li><a href="#intro">入门介绍</a></li>
+                <li><a href="#code-completion">代码补全</a></li>
+                <li><a href="#chat">智能聊天</a></li>
+                <li><a href="#agent">代理模式</a></li>
+                <li><a href="#examples">Python示例</a></li>
+                <li><a href="#advanced">高级功能</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <aside class="sidebar">
+                <div class="toc">
+                    <h2>目录</h2>
+                    <ul class="toc-list">
+                        <li><a href="#intro">一、Cursor入门与基础功能</a></li>
+                        <li class="toc-subitem"><a href="#what-is-cursor">1.1 什么是Cursor？</a></li>
+                        <li class="toc-subitem"><a href="#installation">1.2 安装与设置</a></li>
+                        <li class="toc-subitem"><a href="#core-features">1.3 核心功能概览</a></li>
+                        <li><a href="#code-completion">二、代码补全功能详解</a></li>
+                        <li><a href="#chat">三、智能聊天功能深入</a></li>
+                        <li><a href="#agent">四、代理模式深度解析</a></li>
+                        <li><a href="#examples">五、实用Python示例</a></li>
+                        <li><a href="#advanced">六、高级功能与优化技巧</a></li>
+                        <li><a href="#use-cases">七、实际应用场景</a></li>
+                        <li><a href="#best-practices">八、最佳实践与使用技巧</a></li>
+                        <li><a href="#summary">九、总结与展望</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="content">
+                <section id="intro">
+                    <h2>一、Cursor入门与基础功能</h2>
+                    
+                    <div id="what-is-cursor">
+                        <h3>1.1 什么是Cursor？</h3>
+                        <p>Cursor是一款AI优先的代码编辑器，它将VS Code的熟悉界面与先进的大语言模型集成，为开发者提供智能代码补全、上下文感知的代码生成以及自然语言交互等强大功能。</p>
+                        <p>Cursor的核心优势在于其多模式AI界面，能够无缝协作，减少人与代码之间的阻力，让编程更接近<span class="highlight">"所想即所得"</span>的创造过程。</p>
+                    </div>
+
+                    <div id="installation">
+                        <h3>1.2 安装与设置</h3>
+                        <p>安装Cursor非常简单：</p>
+                        <ol class="step-list">
+                            <li class="step">访问<a href="https://www.cursor.com/" target="_blank">Cursor官方网站</a></li>
+                            <li class="step">点击"Download"按钮下载适合你操作系统的安装包</li>
+                            <li class="step">运行安装程序，按照提示完成安装</li>
+                        </ol>
+                        <p>安装完成后，首次启动Cursor时，你可以选择导入VS Code的配置（包括扩展、设置和快捷键），这使得从VS Code迁移到Cursor变得非常容易。</p>
+                    </div>
+
+                    <div id="core-features">
+                        <h3>1.3 核心功能概览</h3>
+                        <p>Cursor提供了几个核心功能，这些功能可以无缝协作，提高你的工作效率：</p>
+                        
+                        <div class="feature-card">
+                            <h4>AI驱动的代码补全</h4>
+                            <p>了解你的代码库并提供上下文相关的建议</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4>对话界面</h4>
+                            <p>通过提问、编辑和代理模式浏览、理解和修改代码</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <h4>智能工具</h4>
+                            <p>处理复杂的开发任务，如代码生成、调试和优化</p>
+                        </div>
+                        
+                        <p>Cursor的三种主要工作模式：</p>
+                        <ul>
+                            <li><strong>自动补全(Tab)</strong>：按<code>Tab</code>键进行智能代码补全</li>
+                            <li><strong>内联编辑(Cmd-K/Ctrl-K)</strong>：使用<code>Cmd/Ctrl + K</code>进行内联代码编辑</li>
+                            <li><strong>统一AI界面(Chat)</strong>：使用<code>⌘I</code>打开统一的AI界面，该界面具有三种模式：Ask（提问）、Edit（编辑）和Agent（代理）</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="code-completion">
+                    <h2>二、代码补全功能详解</h2>
+                    
+                    <h3>2.1 Tab补全基础</h3>
+                    <p>Cursor的Tab补全功能是其最核心的功能之一，旨在通过AI技术帮助开发者快速生成和修改代码，提升编程效率。Cursor的Tab功能基于AI模型，能够根据当前代码的上下文，自动预测并生成代码补全建议。</p>
+                    
+                    <p><strong>基本用法</strong>：</p>
+                    <ul>
+                        <li>输入代码时，Cursor会自动显示补全建议</li>
+                        <li>按下<code>Tab</code>键接受建议</li>
+                        <li>按下<code>Esc</code>键取消建议</li>
+                        <li>使用<code>Ctrl/⌘ + →</code>逐字接受建议</li>
+                    </ul>
+                    
+                    <h3>2.2 多行补全与智能重写</h3>
+                    <p>Cursor的Tab补全不仅限于单行代码，还支持多行补全和智能重写：</p>
+                    
+                    <p><strong>多行补全</strong>：</p>
+                    <p>Cursor支持一次性生成多行代码。例如，当你定义一个类后，按下Tab键，Cursor会自动补全类的方法和属性。</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>输入</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>class Person:
+    def __init__(self, name, age):
+        self.name = name</code></pre>
+                    </div>
+                    
+                    <p>Cursor会补全：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>输出</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def introduce(self):
+        return f"My name is {self.name} and I am {self.age} years old."</code></pre>
+                    </div>
+                    
+                    <p><strong>智能重写</strong>：</p>
+                    <p>Cursor能够根据上下文修改现有代码。例如，如果你写的代码存在格式错误或可以优化，Cursor会检测到并提供改进建议。</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>原始代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>numbers = [1, 2, 3, 4, 5]
+total = 0
+for num in numbers:
+    total = total + num
+print("The sum is", total)</code></pre>
+                    </div>
+                    
+                    <p>Cursor可能建议重写为：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>优化后</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>numbers = [1, 2, 3, 4, 5]
+total = sum(numbers)
+print(f"The sum is {total}")</code></pre>
+                    </div>
+                    
+                    <h3>2.3 光标预测与上下文感知</h3>
+                    <p>Cursor的另一个强大功能是光标预测，它能够预测用户下一步可能编辑的位置，并提前生成补全建议。这一功能使得编码过程更加流畅，减少了频繁移动光标的需要。</p>
+                    <p>Cursor的上下文感知能力也非常出色，它能理解整个代码文件的上下文，提供更精准的补全建议。这意味着即使你在文件的不同位置，Cursor也能记住之前的定义和变量，提供相关的建议。</p>
+                    
+                    <h3>2.4 补全模式配置</h3>
+                    <p>Cursor的补全功能高度可配置，你可以根据自己的偏好调整其行为：</p>
+                    <ol>
+                        <li>打开设置：通过<code>Cmd/Ctrl + ,</code>或命令面板中的"Preferences: Open Settings (UI)"</li>
+                        <li>调整补全相关设置，如触发补全的字符、显示的建议数量等</li>
+                        <li>可以选择不同的AI模型来驱动补全功能，如GPT-4、Claude 3.5 Sonnet等</li>
+                    </ol>
+                </section>
+
+                <section id="chat">
+                    <h2>三、智能聊天功能深入</h2>
+                    
+                    <h3>3.1 聊天界面基础</h3>
+                    <p>Cursor的智能聊天功能是一个强大的AI辅助编程工具，允许开发者直接在编辑器中与AI对话，解决编程问题或获取代码建议。</p>
+                    
+                    <p><strong>打开聊天界面</strong>：</p>
+                    <ul>
+                        <li>按下快捷键<code>Ctrl/⌘ + L</code></li>
+                        <li>点击编辑器右侧的AI面板图标</li>
+                    </ul>
+                    
+                    <p>聊天界面分为两个主要部分：输入框和消息历史。你可以在输入框中描述问题或指令，AI会根据上下文生成回复。</p>
+                    
+                    <h3>3.2 核心聊天功能</h3>
+                    <p>Cursor的聊天功能提供了多项核心能力，使其成为开发过程中的得力助手：</p>
+                    
+                    <div class="feature-card">
+                        <h4>多轮对话</h4>
+                        <p>支持连续提问，AI会根据上下文生成回复，无需重复描述问题。这使得复杂问题的解决更加高效，因为AI能够记住之前的对话内容。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>上下文理解</h4>
+                        <p>自动包含当前文件或项目作为上下文，也可以手动引用特定代码、文件或文件夹。这意味着你可以直接询问关于当前代码的问题，而无需额外提供上下文。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>代码应用</h4>
+                        <p>AI生成的代码可以直接应用到文件中，支持接受或拒绝更改。这一功能消除了传统方法中复制粘贴代码的需要，降低了错误风险。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>外部引用</h4>
+                        <p>支持引用网络信息（@Web）、技术文档（@Doc）或Git提交记录（@Git），提供更全面的上下文支持。这使得AI能够访问最新的文档或外部资源，回答更加准确。</p>
+                    </div>
+                    
+                    <h3>3.3 提问与获取帮助</h3>
+                    <p>在聊天界面中，你可以询问各种关于代码的问题，从简单的语法查询到复杂的算法解释：</p>
+                    
+                    <p><strong>示例问题</strong>：</p>
+                    <ul>
+                        <li>"解释这段代码的功能"</li>
+                        <li>"如何优化这个算法？"</li>
+                        <li>"这个函数的参数应该如何调整？"</li>
+                        <li>"这个错误是什么原因导致的？如何解决？"</li>
+                    </ul>
+                    
+                    <h3>3.4 代码修改与应用</h3>
+                    <p>Cursor的一个强大功能是能够直接根据你的指令修改代码。这一过程非常直观：</p>
+                    <ol>
+                        <li>在聊天输入框中描述你想要进行的修改</li>
+                        <li>AI会生成建议的代码变更</li>
+                        <li>点击"Apply"按钮将代码应用到文件中，或使用快捷键<code>Ctrl/⌘ + Enter</code>接受更改</li>
+                    </ol>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例场景</div>
+                        <p>假设你有一个简单的Python函数：</p>
+                        
+                        <div class="code-header">
+                            <span>原始代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def calculate_average(numbers):
+    total = sum(numbers)
+    return total / len(numbers)</code></pre>
+                        
+                        <p>你可以在聊天界面中输入："添加错误处理，当输入为空列表时返回0"。AI会生成修改后的代码：</p>
+                        
+                        <div class="code-header">
+                            <span>修改后</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def calculate_average(numbers):
+    if not numbers:
+        return 0
+    total = sum(numbers)
+    return total / len(numbers)</code></pre>
+                    </div>
+                    
+                    <h3>3.5 高级上下文控制</h3>
+                    <p>Cursor的聊天功能允许你精确控制提供给AI的上下文，使回答更加准确：</p>
+                    
+                    <p><strong>引用特定代码</strong>：</p>
+                    <p>使用<code>@Code</code>标记引用特定代码块：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>解释这段代码的功能：@Code
+def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)</code></pre>
+                    </div>
+                    
+                    <p><strong>引用文件或文件夹</strong>：</p>
+                    <p>使用<code>@Files</code>和<code>@Folders</code>标记引用特定文件或文件夹：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>分析这个文件中的算法复杂度：@Files example.py</code></pre>
+                    </div>
+                    
+                    <p><strong>引用网络资源</strong>：</p>
+                    <p>使用<code>@Web</code>标记搜索网络信息：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>查找Python中处理CSV文件的最佳实践：@Web</code></pre>
+                    </div>
+                </section>
+
+                <section id="agent">
+                    <h2>四、代理模式深度解析</h2>
+                    
+                    <h3>4.1 代理模式基础</h3>
+                    <p>Agent模式是Cursor中功能最强大、最自动化的模式，设计用于以最少的指导处理复杂的编码任务。它拥有所有工具，可以自主探索你的代码库，阅读文档，浏览网页，编辑文件，并运行终端命令，以高效地完成任务。</p>
+                    
+                    <p><strong>进入代理模式</strong>：</p>
+                    <p>在聊天界面中，你可以选择切换到Agent模式。默认情况下，Cursor的聊天界面已经处于Agent模式。</p>
+                    
+                    <h3>4.2 代理模式核心功能</h3>
+                    <p>Agent模式具有多项高级功能，使其成为处理复杂任务的理想选择：</p>
+                    
+                    <div class="feature-card">
+                        <h4>全工具访问</h4>
+                        <p>Agent模式可以使用所有可用工具来搜索、编辑、创建文件和运行终端命令。这意味着它可以执行比普通聊天模式更广泛的操作。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>自主决策</h4>
+                        <p>Agent能够根据任务需求自主决定下一步行动，例如先搜索相关文档，然后分析代码，最后进行必要的修改。这减少了手动指导的需要，提高了自动化程度。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>多步骤任务处理</h4>
+                        <p>能够处理需要多个步骤完成的复杂任务，例如创建完整的功能模块或重构大型代码库。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>模型选择</h4>
+                        <p>可以预先选择适合特定任务的模型，例如选择Claude 3.5 Sonnet进行代码生成，或选择GPT-4进行复杂逻辑分析。</p>
+                    </div>
+                    
+                    <h3>4.3 代理模式使用流程</h3>
+                    <p>使用Agent模式解决问题通常遵循以下流程：</p>
+                    <ol>
+                        <li><strong>定义任务</strong>：清晰地描述你想要完成的任务</li>
+                        <li><strong>Agent分析</strong>：Agent会分析任务需求，确定所需步骤</li>
+                        <li><strong>执行步骤</strong>：Agent自主执行必要的操作，如搜索、编辑、测试等</li>
+                        <li><strong>结果反馈</strong>：Agent报告任务完成情况，并提供结果</li>
+                    </ol>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例场景</div>
+                        <p>假设你需要创建一个Python函数，该函数能够从给定的URL下载文件，并计算其SHA-256哈希值。你可以在Agent模式下输入："创建一个Python函数，从URL下载文件并计算其SHA-256哈希值"。</p>
+                        
+                        <p>Agent可能会执行以下步骤：</p>
+                        <ol>
+                            <li>搜索Python中如何下载文件的方法</li>
+                            <li>搜索如何计算文件的SHA-256哈希值</li>
+                            <li>结合这两个步骤的信息生成函数代码</li>
+                            <li>添加错误处理和文档字符串</li>
+                        </ol>
+                        
+                        <p>最终生成的代码可能如下：</p>
+                        
+                        <div class="code-header">
+                            <span>生成代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>import requests
+import hashlib
+
+def download_and_hash(url):
+    """
+    从给定的URL下载文件并计算其SHA-256哈希值
+    :param url: 文件的URL
+    :return: 文件的SHA-256哈希值字符串
+    """
+    response = requests.get(url)
+    response.raise_for_status()
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(response.content)
+    return sha256_hash.hexdigest()</code></pre>
+                    </div>
+                    
+                    <h3>4.4 高级代理技巧</h3>
+                    <p>为了充分发挥Agent模式的潜力，可以使用以下高级技巧：</p>
+                    
+                    <p><strong>提供详细指令</strong>：</p>
+                    <p>描述越具体，生成的代码越符合预期。例如："创建一个Python函数，从URL下载文件并计算其SHA-256哈希值，使用上下文管理器处理网络请求，并添加适当的异常处理"。</p>
+                    
+                    <p><strong>指定模型</strong>：</p>
+                    <p>可以指定使用特定的模型来完成任务，例如："claude-3.5-sonnet: 创建一个Python函数，从URL下载文件并计算其SHA-256哈希值"。</p>
+                    
+                    <p><strong>使用检查点</strong>：</p>
+                    <p>Agent在每次生成代码时会创建检查点，方便回滚到之前的版本。这使得实验和迭代更加安全。</p>
+                    
+                    <p><strong>与其他模式协作</strong>：</p>
+                    <p>可以在Agent模式和Ask模式之间切换，以最适合当前任务的方式进行工作。</p>
+                </section>
+
+                <section id="examples">
+                    <h2>五、实用Python示例</h2>
+                    
+                    <h3>5.1 代码补全示例</h3>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例1：列表排序函数</div>
+                        
+                        <div class="code-header">
+                            <span>输入</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def sort_numbers(numbers):</code></pre>
+                        
+                        <p>按下Tab键后，Cursor可能会补全为：</p>
+                        
+                        <div class="code-header">
+                            <span>输出</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def sort_numbers(numbers):
+    return sorted(numbers)</code></pre>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例2：斐波那契数列生成器</div>
+                        
+                        <div class="code-header">
+                            <span>输入</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1</code></pre>
+                        
+                        <p>按下Tab键后，Cursor可能会补全为：</p>
+                        
+                        <div class="code-header">
+                            <span>输出</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)</code></pre>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例3：文件读取函数</div>
+                        
+                        <div class="code-header">
+                            <span>输入</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def read_file(file_path):
+    with open(file_path, 'r') as file:</code></pre>
+                        
+                        <p>按下Tab键后，Cursor可能会补全为：</p>
+                        
+                        <div class="code-header">
+                            <span>输出</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def read_file(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+    return content</code></pre>
+                    </div>
+                    
+                    <h3>5.2 聊天功能示例</h3>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例1：代码解释</div>
+                        
+                        <p><strong>问题</strong>："解释这段代码的功能"</p>
+                        
+                        <div class="code-header">
+                            <span>代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def calculate_average(numbers):
+    total = sum(numbers)
+    return total / len(numbers)</code></pre>
+                        
+                        <p><strong>AI回答</strong>：</p>
+                        <p>"这段代码定义了一个名为calculate_average的函数，该函数接受一个数字列表作为输入。函数首先使用sum()函数计算列表中所有数字的总和，然后将总和除以列表的长度，得到平均值并返回。如果输入的列表为空，这段代码将会抛出ZeroDivisionError异常。"</p>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例2：代码优化</div>
+                        
+                        <p><strong>问题</strong>："优化这个Python函数，使其能够处理非常大的输入列表"</p>
+                        
+                        <div class="code-header">
+                            <span>代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def sum_list(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total</code></pre>
+                        
+                        <p><strong>AI回答</strong>：</p>
+                        <p>"原函数使用循环累加的方式计算列表元素的和，对于非常大的列表，这种方法效率较低。可以使用Python内置的sum()函数来优化，因为sum()是用C语言实现的，效率更高。优化后的代码如下："</p>
+                        
+                        <div class="code-header">
+                            <span>优化后</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def sum_list(numbers):
+    return sum(numbers)</code></pre>
+                    </div>
+                    
+                    <h3>5.3 代理模式示例</h3>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例1：创建完整的Python模块</div>
+                        
+                        <p><strong>任务</strong>："创建一个Python模块，包含一个斐波那契数列生成器和一个计算阶乘的函数"</p>
+                        
+                        <p>Agent生成的代码（fibonacci_and_factorial.py）：</p>
+                        
+                        <div class="code-header">
+                            <span>生成代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def fibonacci(n):
+    """
+    生成第n个斐波那契数
+    :param n: 斐波那契数的索引（从0开始）
+    :return: 第n个斐波那契数
+    """
+    if n < 0:
+        raise ValueError("n必须是非负整数")
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+def factorial(n):
+    """
+    计算n的阶乘
+    :param n: 非负整数
+    :return: n的阶乘
+    """
+    if n < 0:
+        raise ValueError("n必须是非负整数")
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+# 示例用法
+if __name__ == "__main__":
+    print(fibonacci(10))  # 输出55
+    print(factorial(5))   # 输出120</code></pre>
+                    </div>
+                </section>
+
+                <section id="advanced">
+                    <h2>六、高级功能与优化技巧</h2>
+                    
+                    <h3>6.1 上下文管理</h3>
+                    <p>Cursor的一个显著优势是其强大的上下文管理能力，这使得AI能够更好地理解你的代码库和任务需求。</p>
+                    
+                    <p><strong>代码库范围的上下文</strong>：</p>
+                    <p>Cursor能够自动索引你的代码库，使其可用作上下文。这意味着当你在聊天或使用代理模式时，AI可以访问整个项目的代码，提供更相关的建议。</p>
+                    
+                    <p><strong>上下文注入</strong>：</p>
+                    <p>使用<code>@</code>符号来精确控制提供的上下文：</p>
+                    <ul>
+                        <li><code>@files</code>和<code>@folders</code>用于指定路径</li>
+                        <li><code>@web</code>用于外部文档</li>
+                        <li><code>@git</code>用于版本控制上下文</li>
+                    </ul>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>解释这个函数在项目中的作用：@Files src/utils/data_processing.py</code></pre>
+                    </div>
+                    
+                    <h3>6.2 模型配置与选择</h3>
+                    <p>Cursor支持多种AI模型，每种模型都有其特定的优势。了解如何配置和选择模型可以显著提升性能：</p>
+                    
+                    <p><strong>模型选择</strong>：</p>
+                    <p>在聊天或代理模式中，可以通过前缀指定模型，例如：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>claude-3.5-sonnet: 优化这段代码</code></pre>
+                    </div>
+                    
+                    <p><strong>推荐模型选择</strong>：</p>
+                    <ul>
+                        <li>代码生成：Claude 3.5 Sonnet</li>
+                        <li>复杂逻辑分析：GPT-4</li>
+                        <li>快速任务：Cursor Fast</li>
+                        <li>轻量级任务：Cursor Small</li>
+                    </ul>
+                    
+                    <h3>6.3 自定义规则与设置</h3>
+                    <p>Cursor允许你通过自定义规则和设置来调整其行为，以适应个人偏好和项目需求：</p>
+                    
+                    <p><strong>创建自定义规则</strong>：</p>
+                    <p>在项目根目录创建<code>.cursorrules</code>文件，定义特定于项目的规则：</p>
+                    
+                    <div class="example-section">
+                        <div class="code-header">
+                            <span>示例</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>{
+    "assistant_config": {
+        "role": "algorithm_expert",
+        "language": "python",
+        "response_language": "chinese",
+        "description": "你是一个算法开发专家，擅长使用Python开发算法，所有的内容和注释都用中文来书写回答。"
+    },
+    "rules": [
+        {
+            "pattern": "**/*.js,jsx, ts,tsx,py,java,cpp,c,go,rs,php",
+            "priority": "high"
+        },
+        {
+            "pattern": "**/*.[json,yaml,yml,toml,xml]",
+            "priority": "medium"
+        },
+        {
+            "pattern": "**/*.[md,txt,rst]",
+            "priority": "low"
+        }
+    ],
+    "indexing": {
+        "maxFileSize": "1mb",
+        "exclude": [
+            "**/test/**",
+            "**/tests/**",
+            "**/spec/**",
+            "**/specs/**"
+        ]
+    }
+}</code></pre>
+                    </div>
+                    
+                    <h3>6.4 集成与扩展</h3>
+                    <p>Cursor可以与其他工具和服务集成，进一步扩展其功能：</p>
+                    
+                    <div class="feature-card">
+                        <h4>与Git集成</h4>
+                        <p>Cursor能够识别Git提交记录和分支，帮助AI了解项目的变更历史。这使得AI可以基于过去的代码变更模式提供更相关的建议。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>与Notion集成</h4>
+                        <p>可以直接在Cursor中操作Notion内容，如创建/搜索/更新页面内容、获取/回复评论等。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>与VS Code扩展兼容</h4>
+                        <p>Cursor与VS Code扩展兼容，可以导入VS Code的配置和扩展。这使得从VS Code迁移到Cursor更加容易，同时保留了熟悉的开发环境。</p>
+                    </div>
+                </section>
+
+                <section id="use-cases">
+                    <h2>七、实际应用场景</h2>
+                    
+                    <h3>7.1 快速原型开发</h3>
+                    <p>Cursor在快速原型开发中表现出色，能够显著加速从概念到可用代码的过程：</p>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例场景</div>
+                        <p>假设你需要快速创建一个简单的命令行工具，用于计算文件的哈希值。使用Cursor，你可以在几分钟内完成开发：</p>
+                        
+                        <ol>
+                            <li>在代理模式下输入："创建一个Python命令行工具，计算文件的MD5和SHA-256哈希值"</li>
+                            <li>Agent会生成包含必要功能的代码</li>
+                            <li>测试代码，发现问题后，在聊天界面中输入："添加错误处理，当文件不存在时显示友好的错误消息"</li>
+                            <li>Agent会修改代码以添加错误处理</li>
+                            <li>最终得到一个功能完善的工具</li>
+                        </ol>
+                        
+                        <p>生成的代码可能如下：</p>
+                        
+                        <div class="code-header">
+                            <span>生成代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>import hashlib
+import argparse
+
+def calculate_hash(file_path, algorithm):
+    """
+    计算文件的哈希值
+    :param file_path: 文件路径
+    :param algorithm: 哈希算法（md5或sha256）
+    :return: 哈希值字符串
+    """
+    hash_object = hashlib.new(algorithm)
+    with open(file_path, 'rb') as file:
+        while chunk := file.read(4096):
+            hash_object.update(chunk)
+    return hash_object.hexdigest()
+
+def main():
+    parser = argparse.ArgumentParser(description='计算文件的MD5或SHA-256哈希值')
+    parser.add_argument('file', help='要计算哈希值的文件路径')
+    parser.add_argument('-a', '--algorithm', choices=['md5', 'sha256'], default='sha256',
+                        help='哈希算法（默认：sha256）')
+    args = parser.parse_args()
+
+    try:
+        hash_value = calculate_hash(args.file, args.algorithm)
+        print(f"{args.algorithm.upper()}哈希值: {hash_value}")
+    except FileNotFoundError:
+        print(f"错误：文件'{args.file}'未找到")
+    except IsADirectoryError:
+        print(f"错误：'{args.file}'是一个目录")
+    except PermissionError:
+        print(f"错误：没有读取文件'{args.file}'的权限")
+
+if __name__ == '__main__':
+    main()</code></pre>
+                    </div>
+                    
+                    <h3>7.2 代码审查与优化</h3>
+                    <p>Cursor可以作为代码审查的有力工具，帮助识别潜在问题并提出改进建议：</p>
+                    
+                    <div class="example-section">
+                        <div class="example-title">示例场景</div>
+                        <p>假设你有一个复杂的Python函数，你不确定其效率如何。使用Cursor的聊天功能：</p>
+                        
+                        <ol>
+                            <li>选择要审查的代码</li>
+                            <li>按下<code>Ctrl+K</code>打开内联编辑窗口</li>
+                            <li>输入："分析这段代码的时间复杂度和空间复杂度，并提出优化建议"</li>
+                            <li>AI会生成详细的分析和优化建议</li>
+                        </ol>
+                        
+                        <p>对于以下代码：</p>
+                        
+                        <div class="code-header">
+                            <span>原始代码</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def find_duplicates(lst):
+    duplicates = []
+    for i in range(len(lst)):
+        for j in range(i+1, len(lst)):
+            if lst[i] == lst[j] and lst[i] not in duplicates:
+                duplicates.append(lst[i])
+    return duplicates</code></pre>
+                        
+                        <p>AI的分析和建议可能是：</p>
+                        <p>"这段代码的时间复杂度是O(n²)，空间复杂度是O(n)。可以使用集合来优化，将时间复杂度降低到O(n)。优化后的代码如下："</p>
+                        
+                        <div class="code-header">
+                            <span>优化后</span>
+                            <button class="copy-btn">复制</button>
+                        </div>
+                        <pre><code>def find_duplicates(lst):
+    seen = set()
+    duplicates = set()
+    for num in lst:
+        if num in seen:
+            duplicates.add(num)
+        else:
+            seen.add(num)
+    return list(duplicates)</code></pre>
+                    </div>
+                </section>
+
+                <section id="best-practices">
+                    <h2>八、最佳实践与使用技巧</h2>
+                    
+                    <h3>8.1 有效提问技巧</h3>
+                    <p>为了获得最佳的AI响应，需要掌握有效提问的技巧：</p>
+                    
+                    <p><strong>提供明确的上下文</strong>：</p>
+                    <p>尽可能提供详细的上下文信息，包括相关代码、错误信息和预期行为。例如："在Python中，当我运行这段代码时出现TypeError: 'NoneType' object is not subscriptable。请解释原因并提供解决方案"。</p>
+                    
+                    <p><strong>使用具体的指令</strong>：</p>
+                    <p>明确说明你想要什么，而不是泛泛而谈。例如："将这个函数重构为使用列表推导式"比"优化这个函数"更有效。</p>
+                    
+                    <p><strong>分步骤提问</strong>：</p>
+                    <p>对于复杂的问题，将其分解为多个小问题，逐个解决。例如，首先询问如何解决特定错误，然后询问如何优化代码，最后询问如何添加新功能。</p>
+                    
+                    <h3>8.2 提高生成代码质量</h3>
+                    <p>以下技巧可以帮助提高AI生成代码的质量：</p>
+                    
+                    <p><strong>使用正确的模型</strong>：</p>
+                    <p>根据任务类型选择合适的模型。例如，使用Claude 3.5 Sonnet进行代码生成，使用GPT-4进行复杂逻辑分析。</p>
+                    
+                    <p><strong>提供示例</strong>：</p>
+                    <p>如果有特定的代码风格或结构偏好，可以提供示例。例如："生成一个类似Django视图函数的代码结构，包含文档字符串和错误处理"。</p>
+                    
+                    <p><strong>指定约束条件</strong>：</p>
+                    <p>明确说明任何约束条件，如性能要求、兼容性限制或安全标准。例如："创建一个不使用第三方库的Python函数，计算字符串中每个字符的出现次数"。</p>
+                    
+                    <h3>8.3 效率提升技巧</h3>
+                    <p>以下是一些提高Cursor使用效率的实用技巧：</p>
+                    
+                    <p><strong>使用快捷键</strong>：</p>
+                    <p>掌握常用的快捷键，如<code>Ctrl/⌘ + L</code>（打开聊天界面）、<code>Ctrl/⌘ + K</code>（内联编辑）和<code>Ctrl/⌘ + I</code>（打开Composer），可以显著提高工作效率。</p>
+                    
+                    <p><strong>批量操作</strong>：</p>
+                    <p>利用Composer功能同时修改多个文件。例如，在Composer中输入："将项目中所有Python文件中的print语句替换为logging调用"。</p>
+                    
+                    <p><strong>自定义快捷键</strong>：</p>
+                    <p>在设置中自定义快捷键，使其更符合个人习惯。例如，将<code>Ctrl/⌘ + Alt + C</code>映射到"生成代码注释"命令。</p>
+                </section>
+
+                <section id="summary">
+                    <h2>九、总结与展望</h2>
+                    
+                    <h3>9.1 Cursor的价值总结</h3>
+                    <p>Cursor作为一款AI驱动的代码编辑器，为开发者提供了多项显著价值：</p>
+                    
+                    <div class="feature-card">
+                        <h4>提高开发效率</h4>
+                        <p>通过智能代码补全、自动代码生成和上下文感知的建议，Cursor显著减少了编写代码所需的时间和精力。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>降低学习曲线</h4>
+                        <p>对于新语言、框架或库，Cursor可以提供即时帮助，解释概念并提供示例代码，加速学习过程。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>提升代码质量</h4>
+                        <p>通过代码审查、优化建议和错误检测，Cursor帮助开发者编写更高效、更安全、更易维护的代码。</p>
+                    </div>
+                    
+                    <h3>9.2 未来发展趋势</h3>
+                    <p>随着AI技术的不断进步，我们可以预见Cursor未来的发展趋势：</p>
+                    
+                    <ul>
+                        <li><strong>更强大的模型集成</strong>：未来版本的Cursor可能会集成更先进的AI模型，提供更智能、更准确的代码生成和理解能力。</li>
+                        <li><strong>更深入的IDE集成</strong>：与其他开发工具和服务的集成将更加紧密，创造无缝的开发体验。</li>
+                        <li><strong>增强的多模态能力</strong>：除了文本和代码，Cursor可能会扩展支持其他形式的输入和输出，如图形界面设计、数据可视化和自然语言对话。</li>
+                        <li><strong>个性化学习路径</strong>：Cursor可能会根据用户的技能水平和项目需求，提供个性化的学习建议和代码模式推荐。</li>
+                    </ul>
+                    
+                    <h3>9.3 行动建议</h3>
+                    <p>对于想要开始使用Cursor的开发者，以下是一些行动建议：</p>
+                    <ol>
+                        <li><strong>立即下载并安装Cursor</strong>：从<a href="https://www.cursor.com/" target="_blank">官方网站</a>下载适合你操作系统的版本。</li>
+                        <li><strong>探索基础功能</strong>：花些时间熟悉Cursor的基本功能，如Tab补全、聊天界面和代理模式。</li>
+                        <li><strong>尝试示例代码</strong>：使用本文提供的示例代码进行练习，了解Cursor的工作方式。</li>
+                        <li><strong>将Cursor融入日常工作流程</strong>：开始在日常项目中使用Cursor，逐步替代传统的编辑工具。</li>
+                        <li><strong>持续学习</strong>：关注Cursor的官方文档、博客和社区，了解最新功能和最佳实践。</li>
+                    </ol>
+                    
+                    <p>通过掌握Cursor，你将能够以更快的速度编写更高质量的代码，释放AI在软件开发中的全部潜力。无论你是经验丰富的开发者还是刚刚起步的新手，Cursor都能成为你工具箱中不可或缺的工具。</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2023 Cursor Guide. All rights reserved.</p>
+            <p>基于官方文档制作 | <a href="https://www.cursor.com/" target="_blank">Cursor 官方网站</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // 移动菜单切换
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 如果是移动菜单，点击后关闭
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // 返回顶部按钮
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // 代码复制功能
+        const copyBtns = document.querySelectorAll('.copy-btn');
+        
+        copyBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const codeBlock = btn.parentElement.nextElementSibling;
+                const code = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = btn.textContent;
+                    btn.textContent = '已复制!';
+                    btn.style.color = '#81C784';
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.color = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

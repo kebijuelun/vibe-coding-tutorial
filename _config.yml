@@ -1,0 +1,48 @@
+# GitHub Pages Configuration
+title: AI编程工具指南
+description: 全面的AI编程工具使用指南，包括Claude Code、Cursor、Vibe Coding等主流工具
+author: AI编程工具指南团队
+email: contact@example.com
+url: https://lwz.github.io
+baseurl: /vibe_code_cursor
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Language
+lang: zh-CN
+
+# SEO
+twitter:
+  username:
+  card: summary_large_image
+
+social:
+  name: AI编程工具指南
+  links:
+    - https://github.com/lwz/vibe_code_cursor
+
+# Google Analytics (optional)
+# google_analytics: UA-XXXXXXXXX-X
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - README.md
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge

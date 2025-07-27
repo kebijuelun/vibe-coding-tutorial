@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI编程工具指南 - Vibe Code</title>
+    <meta name="description" content="全面的AI编程工具指南，包括Claude Code、Cursor、Vibe Coding等主流工具的详细介绍和使用技巧">
+    <style>
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #edf2f7;
+            --text-secondary: #a0aec0;
+            --accent: #9f7aea;
+            --accent-light: #b794f6;
+            --code-bg: #1a202c;
+            --border: #2d3748;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --warning: #f6ad55;
+            --success: #68d391;
+            --danger: #fc8181;
+            --info: #63b3ed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23333" stroke-width="1" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light), #63b3ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            max-width: 900px;
+            margin: 0 auto 2rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(159, 122, 234, 0.3);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+            background-color: var(--bg-tertiary);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .intro-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .intro-section p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Article Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .article-card {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--info));
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px var(--shadow);
+        }
+
+        .article-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: rgba(159, 122, 234, 0.2);
+            color: var(--accent-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(159, 122, 234, 0.3);
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(159, 122, 234, 0.3);
+        }
+
+        .read-more:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.4);
+        }
+
+        /* Features Section */
+        .features-section {
+            margin: 4rem 0;
+            text-align: center;
+        }
+
+        .features-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-tertiary);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px var(--shadow);
+            z-index: 99;
+            font-size: 1.5rem;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .stats {
+                gap: 1.5rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .article-card {
+                padding: 1.5rem;
+            }
+
+            main {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Hover Effects */
+        .article-card:hover .article-icon {
+            transform: scale(1.1);
+            transition: transform 0.3s;
+        }
+
+        /* Gradient Backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg,
+                rgba(159, 122, 234, 0.1) 0%,
+                rgba(99, 179, 237, 0.1) 50%,
+                rgba(104, 211, 145, 0.1) 100%);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-bg"></div>
+        <div class="header-content">
+            <div class="highlight-badge">🚀 AI编程新时代</div>
+            <h1>AI编程工具指南</h1>
+            <p class="subtitle">掌握Claude Code、Cursor、Vibe Coding等主流AI编程工具，开启高效编程新体验</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">深度指南</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">工具覆盖</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">实用技巧</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                🎯 Vibe Code
+            </div>
+            <ul class="nav-links">
+                <li><a href="#articles">文章指南</a></li>
+                <li><a href="#features">特色功能</a></li>
+                <li><a href="https://github.com/lwz/vibe_code_cursor" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="intro-section gradient-bg">
+            <h2>欢迎来到AI编程工具指南</h2>
+            <p>在AI编程快速发展的今天，本站为您精心整理了最全面的AI编程工具使用指南。从Claude Code的实用技巧到Cursor的入门教程，从Vibe Coding的革新理念到大模型能力的深度评估，帮助您快速掌握AI编程的核心技能。</p>
+        </section>
+
+        <section id="articles" class="articles-section">
+            <div class="articles-grid">
+                <article class="article-card fade-in">
+                    <span class="article-icon">🤖</span>
+                    <h3 class="article-title">Claude Code实用技巧全面指南</h3>
+                    <p class="article-description">深入探索Claude Code的核心功能，包括代码生成、审查与调试技巧。从定制工作环境到构建高效提示工程，掌握Anthropic官方推荐的最佳实践。</p>
+                    <div class="article-tags">
+                        <span class="tag">Claude Code</span>
+                        <span class="tag">代码生成</span>
+                        <span class="tag">调试技巧</span>
+                        <span class="tag">工作流程</span>
+                    </div>
+                    <a href="cc使用技巧.html" class="read-more">
+                        阅读全文 →
+                    </a>
+                </article>
+
+                <article class="article-card fade-in">
+                    <span class="article-icon">⚡</span>
+                    <h3 class="article-title">Cursor：AI驱动的代码编辑器全指南</h3>
+                    <p class="article-description">全面介绍Cursor的智能功能，从代码补全到聊天交互，再到代理模式。通过实用Python示例和最佳实践，快速上手这款革命性工具。</p>
+                    <div class="article-tags">
+                        <span class="tag">Cursor</span>
+                        <span class="tag">AI编辑器</span>
+                        <span class="tag">代码补全</span>
+                        <span class="tag">Python</span>
+                    </div>
+                    <a href="cursor入门.html" class="read-more">
+                        阅读全文 →
+                    </a>
+                </article>
+
+                <article class="article-card fade-in">
+                    <span class="article-icon">🎨</span>
+                    <h3 class="article-title">Vibe Coding 完全指南</h3>
+                    <p class="article-description">探索Andrej Karpathy提出的Vibe Coding概念，体验意图驱动的编程新方式。深度对比Claude Code、Gemini CLI、Qwen Code等主流工具。</p>
+                    <div class="article-tags">
+                        <span class="tag">Vibe Coding</span>
+                        <span class="tag">AI协作</span>
+                        <span class="tag">工具对比</span>
+                        <span class="tag">编程范式</span>
+                    </div>
+                    <a href="vibe_coding.html" class="read-more">
+                        阅读全文 →
+                    </a>
+                </article>
+
+                <article class="article-card fade-in">
+                    <span class="article-icon">📊</span>
+                    <h3 class="article-title">大模型编程能力评估</h3>
+                    <p class="article-description">基于LiveCodeBench、SWE-Bench榜单与自定义测试案例，全面对比GPT-4o、Claude Sonnet 4、Gemini 2.5 Pro等主流大模型的编程能力。</p>
+                    <div class="article-tags">
+                        <span class="tag">能力评估</span>
+                        <span class="tag">模型对比</span>
+                        <span class="tag">基准测试</span>
+                        <span class="tag">性能分析</span>
+                    </div>
+                    <a href="大模型编程能力评估.html" class="read-more">
+                        阅读全文 →
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <h2>为什么选择AI编程工具？</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">效率提升</div>
+                    <div class="feature-description">通过AI辅助编程，开发效率可提升3-10倍，大幅减少重复性工作</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">智能理解</div>
+                    <div class="feature-description">AI能够理解上下文和意图，提供精准的代码建议和解决方案</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-title">全流程覆盖</div>
+                    <div class="feature-description">从需求分析到代码实现，从调试到优化，AI工具覆盖完整开发流程</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <div class="feature-title">持续学习</div>
+                    <div class="feature-description">AI工具不断更新迭代，能够学习最新的编程实践和技术趋势</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="cc使用技巧.html">Claude Code指南</a>
+                <a href="cursor入门.html">Cursor教程</a>
+                <a href="vibe_coding.html">Vibe Coding</a>
+                <a href="大模型编程能力评估.html">能力评估</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 AI编程工具指南. 致力于推广AI编程技术</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 返回顶部按钮
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            const cards = document.querySelectorAll('.article-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // 添加统计数字动画
+        function animateNumbers() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.textContent.replace('+', ''));
+                let current = 0;
+                const increment = target / 30;
+
+                const updateNumber = () => {
+                    if (current < target) {
+                        current += increment;
+                        if (stat.textContent.includes('+')) {
+                            stat.textContent = Math.floor(current) + '+';
+                        } else {
+                            stat.textContent = Math.floor(current);
+                        }
+                        requestAnimationFrame(updateNumber);
+                    } else {
+                        stat.textContent = stat.textContent.includes('+') ? target + '+' : target;
+                    }
+                };
+
+                updateNumber();
+            });
+        }
+
+        // 触发数字动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNumbers();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        observer.observe(document.querySelector('.stats'));
+
+        // 文章卡片悬停效果
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
