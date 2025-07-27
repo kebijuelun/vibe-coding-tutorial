@@ -151,112 +151,9 @@
             padding: 0 2rem;
         }
 
-        .container {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .sidebar {
-            width: 400px;
-            position: sticky;
-            top: 100px;
-            height: calc(100vh - 120px);
-            overflow-y: auto;
-            padding-right: 1rem;
-        }
-
-        .toc {
-            background-color: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .toc h2 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
-            color: var(--accent);
-        }
-
-        .toc-list {
-            list-style: none;
-        }
-
-        .toc-list li {
-            margin-bottom: 0.3rem;
-        }
-
-        .toc-list a {
-            color: var(--text-primary);
-            text-decoration: none;
-            display: block;
-            padding: 0.6rem 0.8rem;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            border-left: 3px solid transparent;
-            position: relative;
-        }
-
-        .toc-list a:hover {
-            color: var(--accent-light);
-            background-color: rgba(159, 122, 234, 0.1);
-            border-left-color: var(--accent);
-            transform: translateX(5px);
-        }
-
-        .toc-list a.active {
-            color: var(--accent);
-            background-color: rgba(159, 122, 234, 0.15);
-            border-left-color: var(--accent);
-            font-weight: 600;
-        }
-
-        .toc-list .toc-subitem {
-            margin-left: 1rem;
-            border-left: 2px solid var(--border);
-            padding-left: 0;
-        }
-
-        .toc-list .toc-subitem a {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            padding: 0.4rem 0.8rem;
-            margin-left: 1rem;
-            position: relative;
-        }
-
-        .toc-list .toc-subitem a::before {
-            content: "◦";
-            position: absolute;
-            left: -0.5rem;
-            color: var(--accent);
-            font-size: 1.2rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .toc-list .toc-subitem a:hover::before,
-        .toc-list .toc-subitem a.active::before {
-            opacity: 1;
-        }
-
-        .toc-list .toc-subitem a:hover {
-            color: var(--accent-light);
-            background-color: rgba(159, 122, 234, 0.08);
-        }
-
-        .toc-list .toc-subitem a.active {
-            color: var(--accent);
-            background-color: rgba(159, 122, 234, 0.12);
-            font-weight: 500;
-        }
-
         .content {
-            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         /* Content Sections */
@@ -584,17 +481,6 @@
 
         /* Responsive Design */
         @media (max-width: 992px) {
-            .container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                position: static;
-                height: auto;
-                margin-bottom: 2rem;
-            }
-
             h1 {
                 font-size: 2.8rem;
             }
@@ -703,34 +589,7 @@
     </nav>
 
     <main>
-        <div class="container">
-            <aside class="sidebar">
-                <div class="toc">
-                    <h2>📚 目录导航</h2>
-                    <ul class="toc-list">
-                        <li><a href="#concept">🎨 Vibe Coding 概念</a></li>
-                        <li class="toc-subitem"><a href="#what-is-vibe">什么是 Vibe Coding</a></li>
-                        <li class="toc-subitem"><a href="#principles">核心原则</a></li>
-                        <li><a href="#claude-code">🤖 Claude Code</a></li>
-                        <li class="toc-subitem"><a href="#claude-install">安装配置</a></li>
-                        <li class="toc-subitem"><a href="#claude-tips">使用技巧</a></li>
-                        <li class="toc-subitem"><a href="#claude-cases">实战案例</a></li>
-                        <li><a href="#gemini-cli">💎 Gemini CLI</a></li>
-                        <li class="toc-subitem"><a href="#gemini-install">安装使用</a></li>
-                        <li class="toc-subitem"><a href="#gemini-features">功能特点</a></li>
-                        <li><a href="#qwen-code">🇨🇳 Qwen Code</a></li>
-                        <li class="toc-subitem"><a href="#qwen-install">快速上手</a></li>
-                        <li class="toc-subitem"><a href="#qwen-advantages">优势特色</a></li>
-                        <li><a href="#codex">⚡ OpenAI Codex</a></li>
-                        <li class="toc-subitem"><a href="#codex-usage">使用方式</a></li>
-                        <li class="toc-subitem"><a href="#codex-workflow">工作流程</a></li>
-                        <li><a href="#comparison">📊 工具对比</a></li>
-                        <li><a href="#summary">🎯 总结</a></li>
-                    </ul>
-                </div>
-            </aside>
-
-            <div class="content">
+        <div class="content">
                 <section id="concept">
                     <h2>🎨 Vibe Coding 概念</h2>
 
@@ -1442,7 +1301,6 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
                     </div>
                 </section>
             </div>
-        </div>
     </main>
 
     <a href="#" class="back-to-top" id="backToTop">↑</a>
@@ -1526,65 +1384,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
             });
         });
 
-        // 改进的目录高亮功能
-        function initTocHighlight() {
-            const sections = document.querySelectorAll('section[id], div[id]');
-            const tocLinks = document.querySelectorAll('.toc-list a[href^="#"]');
 
-            function highlightTocItem() {
-                let current = '';
-                const scrollPos = window.pageYOffset + 150; // 添加偏移量
-
-                // 找到当前在视口中的section
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.offsetHeight;
-                    const sectionBottom = sectionTop + sectionHeight;
-
-                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                // 如果在页面顶部，高亮第一个链接
-                if (scrollPos < 200) {
-                    current = 'concept';
-                }
-
-                // 如果在页面底部，高亮最后一个链接
-                if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100) {
-                    current = 'summary';
-                }
-
-                // 更新高亮状态
-                tocLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-
-            // 初始化时执行一次
-            highlightTocItem();
-
-            // 滚动时执行
-            let ticking = false;
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        highlightTocItem();
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-        }
-
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            initTocHighlight();
-        });
     </script>
 </body>
 </html>
