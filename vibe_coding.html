@@ -733,13 +733,13 @@
             <div class="content">
                 <section id="concept">
                     <h2>🎨 Vibe Coding 概念</h2>
-                    
+
                     <div id="what-is-vibe">
                         <div class="highlight-box">
                             <h4>🌟 什么是 Vibe Coding？</h4>
                             <p>在 AI 编程辅助工具日渐兴盛的今天，<strong>"Vibe Coding"</strong> 正在成为一种全新的开发体验方式。Vibe coding 是由著名计算机科学家 <strong>Andrej Karpathy</strong> 在2025年2月提出并推广的一种 AI 辅助软件开发风格。</p>
                         </div>
-                        
+
                         <p>Karpathy 将其描述为<em>"一种新的编程方式，你完全沉浸在感觉中，拥抱指数级发展，甚至忘记代码的存在。<strong>在 vibe coding 中，程序员不需要理解代码如何或为什么工作，只需要告诉AI程序想要什么，让它为你创建产品</strong>"</em></p>
                     </div>
 
@@ -749,17 +749,17 @@
                             <h4>💭 意图驱动编程</h4>
                             <p>不再需要深入了解具体的代码实现，只需要清楚地表达你想要什么，AI 会帮你实现</p>
                         </div>
-                        
+
                         <div class="feature-card">
                             <h4>🌊 沉浸式体验</h4>
                             <p>完全沉浸在创造的过程中，减少与具体技术细节的交互摩擦</p>
                         </div>
-                        
+
                         <div class="feature-card">
                             <h4>📈 指数级效率</h4>
                             <p>通过AI的协助，开发效率可以实现指数级的提升</p>
                         </div>
-                        
+
                         <div class="feature-card">
                             <h4>🎨 创意优先</h4>
                             <p>将更多精力投入到产品设计和用户体验，而非底层代码实现</p>
@@ -773,19 +773,19 @@
 
                 <section id="claude-code">
                     <h2>🤖 Claude Code</h2>
-                    
+
                     <div id="claude-install">
                         <h3>📦 安装流程</h3>
-                        
+
                         <h4>第一步：安装 Claude Code</h4>
                         <div class="code-header">
                             <span>npm 安装命令</span>
                             <button class="copy-btn">复制</button>
                         </div>
                         <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
-                        
+
                         <p>如果遇到报错可以尝试 <a href="https://github.com/LLM-Red-Team/kimi-cc" target="_blank">https://github.com/LLM-Red-Team/kimi-cc</a> 中提供的一键安装脚本(需要提前获取 API Key 获取方式参考后面的介绍)：</p>
-                        
+
                         <div class="code-header">
                             <span>一键安装脚本</span>
                             <button class="copy-btn">复制</button>
@@ -794,7 +794,7 @@
 
                         <h4>第二步：跳过地区限制</h4>
                         <p>因为 Claude 限制中国地区的实用，在终端运行以下命令可以跳过 Claude 的地区审核：</p>
-                        
+
                         <div class="code-header">
                             <span>跳过地区限制</span>
                             <button class="copy-btn">复制</button>
@@ -813,7 +813,7 @@ fi</code></pre>
 
                         <h4>第四步：设置 API 环境变量（以 Kimi API 为例）</h4>
                         <p>以下 `sk-xxx` 格式的 API Key 是在以上步骤获取得到的：</p>
-                        
+
                         <div class="code-header">
                             <span>环境变量设置</span>
                             <button class="copy-btn">复制</button>
@@ -823,7 +823,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>第五步：启动 Claude Code</h4>
                         <p>直接在终端输入命令 `claude` 即可：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/e1f9fee1ea70ff4f.png" alt="Claude Code启动界面">
                             <div class="image-caption">Claude Code 启动界面</div>
@@ -832,7 +832,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                     <div id="claude-tips">
                         <h3>💡 Claude Code 使用技巧</h3>
-                        
+
                         <div class="success-box">
                             <strong>参考资料：</strong>
                             <ul>
@@ -843,7 +843,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>1. 定制 Claude 的工作环境：`/init` 命令</h4>
                         <p>创建 CLAUDE.md 文件是提升 Claude Code 生成质量的第一步。这个特殊文件会在会话开始时自动被 Claude 读取，成为其上下文的一部分，是记录项目特定信息的理想场所。</p>
-                        
+
                         <div class="highlight-box">
                             <h4>📝 在 CLAUDE.md 中可以记录：</h4>
                             <ul>
@@ -859,7 +859,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>2. 构建高效的提示工程</h4>
                         <p>提供清晰、具体的指令是获得高质量代码生成的关键。Claude 在明确的指示下表现最佳，特别是在首次尝试时。</p>
-                        
+
                         <div class="image-container">
                             <img src="images/0c8444fa57cd6dbc.png" alt="提示工程对比">
                             <div class="image-caption">好的提示工程 vs 坏的提示工程对比</div>
@@ -873,7 +873,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>3. 利用子代理和并行处理</h4>
                         <p>在复杂任务中使用子代理可以显著提高Claude的性能。特别是在对话或任务的早期阶段，指示Claude使用子代理来验证细节或调查特定问题。</p>
-                        
+
                         <div class="code-header">
                             <span>子代理使用示例</span>
                             <button class="copy-btn">复制</button>
@@ -882,7 +882,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>4. 采用标准工作流程</h4>
                         <p>Anthropic 工程师普遍采用的<strong>探索-规划-编码-提交</strong>工作流程非常有效：</p>
-                        
+
                         <ol class="step-list">
                             <li class="step"><strong>探索阶段：</strong>让Claude读取相关文件、图像或URL，但明确告诉它不要立即编写代码</li>
                             <li class="step"><strong>规划阶段：</strong>要求Claude制定解决特定问题的计划，使用"think"触发词来获取更深入的思考</li>
@@ -892,7 +892,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>5. 在 VSCode、Cursor 等 IDE 中使用 Claude Code</h4>
                         <p>参考：<a href="https://docs.anthropic.com/zh-TW/docs/claude-code/ide-integrations" target="_blank">https://docs.anthropic.com/zh-TW/docs/claude-code/ide-integrations</a></p>
-                        
+
                         <div class="tool-card">
                             <div class="tool-title">🔧 支持的 IDE</div>
                             <ul>
@@ -915,7 +915,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
                         <h3>🚀 使用案例</h3>
 
                         <h4>案例1：从头开始实现代码</h4>
-                        
+
                         <h5>📊 从头实现简易代码</h5>
                         <div class="example-section">
                             <div class="example-title">💼 需求描述</div>
@@ -946,12 +946,12 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
                         </div>
 
                         <div class="image-container">
-                            <img src="images/14e0171a9a37ca26.png" alt="人工配合review">
+                            <img src="images/de574fb57bbb4b0a8105b2f86a510978.png" alt="人工配合review">
                             <div class="image-caption">中途可能 Claude Code 会需要人工配合 review 一些步骤</div>
                         </div>
 
                         <p>写完的代码发现运行会报错，看 Claude Code 的输出有提示是因为 yfinance 读取股票数据遇到了问题，于是给以下提示词，让 Claude Code 更换一个股票数据库：</p>
-                        
+
                         <div class="code-header">
                             <span>优化提示</span>
                             <button class="copy-btn">复制</button>
@@ -978,14 +978,14 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
                         </div>
 
                         <p>但是这里画的图有点问题，图的标题和坐标轴的文字显示异常：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/8d44e1a464af9bef.png" alt="图片显示问题">
                             <div class="image-caption">图片中的字没有正常显示</div>
                         </div>
 
                         <p>于是继续让 Claude Code 修复该问题：</p>
-                        
+
                         <div class="code-header">
                             <span>修复提示</span>
                             <button class="copy-btn">复制</button>
@@ -1089,10 +1089,10 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                 <section id="gemini-cli">
                     <h2>💎 Gemini CLI</h2>
-                    
+
                     <div id="gemini-install">
                         <h3>📦 安装流程</h3>
-                        
+
                         <div class="tool-card">
                             <div class="tool-title">🌟 Gemini CLI 介绍</div>
                             <p>参考：<a href="https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/" target="_blank">https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/</a></p>
@@ -1117,14 +1117,14 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>第二步：启动和配置</h4>
                         <p>直接在终端输入 `gemini` 即可开启：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/34a511ce5870818f.png" alt="Gemini CLI启动">
                             <div class="image-caption">Gemini CLI 启动界面</div>
                         </div>
 
                         <p>主题一般选择默认：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/c811e206350d0c03.png" alt="Gemini CLI主题选择">
                             <div class="image-caption">主题选择界面</div>
@@ -1132,7 +1132,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                         <h4>第三步：账号登录</h4>
                         <p>一般个人使用选择 google 账号登录（注意这里登录可能需要科学上网），会自动跳转到 google 的登录界面，登录后即可开始使用：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/89075349b68f6d26.png" alt="Gemini CLI登录">
                             <div class="image-caption">Google 账号登录界面</div>
@@ -1145,7 +1145,7 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                     <div id="gemini-features">
                         <h3>✨ 功能特点</h3>
-                        
+
                         <div class="feature-card">
                             <h4>🆓 免费使用</h4>
                             <p>预览版提供丰富的免费额度，对个人开发者非常友好</p>
@@ -1170,10 +1170,10 @@ export ANTHROPIC_API_KEY=sk-xxx</code></pre>
 
                 <section id="qwen-code">
                     <h2>🇨🇳 Qwen Code</h2>
-                    
+
                     <div id="qwen-install">
                         <h3>📦 快速上手</h3>
-                        
+
                         <div class="tool-card">
                             <div class="tool-title">🚀 Qwen3 Code 介绍</div>
                             <p>官方博客：<a href="https://qwenlm.github.io/zh/blog/qwen3-coder/" target="_blank">https://qwenlm.github.io/zh/blog/qwen3-coder/</a></p>
@@ -1204,7 +1204,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                     <div id="qwen-advantages">
                         <h3>🌟 优势特色</h3>
-                        
+
                         <div class="feature-card">
                             <h4>🏠 国产化优势</h4>
                             <p>阿里云出品，对中文支持更好，服务稳定可靠</p>
@@ -1229,10 +1229,10 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                 <section id="codex">
                     <h2>⚡ OpenAI Codex</h2>
-                    
+
                     <div id="codex-usage">
                         <h3>🎯 使用方式</h3>
-                        
+
                         <div class="tool-card">
                             <div class="tool-title">🤖 Codex 介绍</div>
                             <p>官网博客：<a href="https://openai.com/index/introducing-codex/" target="_blank">https://openai.com/index/introducing-codex/</a></p>
@@ -1240,7 +1240,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                         <h4>第一步：访问 ChatGPT 官网</h4>
                         <p>访问 <a href="https://chatgpt.com/" target="_blank">https://chatgpt.com/</a> 侧边栏点击 Codex</p>
-                        
+
                         <div class="image-container">
                             <img src="images/3d3de841c2a43f54.png" alt="Codex入口">
                             <div class="image-caption">ChatGPT 侧边栏中的 Codex 入口</div>
@@ -1248,7 +1248,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                         <h4>第二步：开始使用</h4>
                         <p>点击开始使用</p>
-                        
+
                         <div class="image-container">
                             <img src="images/68b6d183bfddc694.png" alt="Codex开始页面">
                             <div class="image-caption">Codex 开始使用页面</div>
@@ -1256,7 +1256,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                         <h4>第三步：连接到 GitHub</h4>
                         <p>连接到 GitHub，可以选择一个自己的仓库作为初始环境</p>
-                        
+
                         <div class="image-container">
                             <img src="images/a57e14faa509eb7d.png" alt="GitHub连接">
                             <div class="image-caption">连接 GitHub 仓库</div>
@@ -1265,30 +1265,30 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                     <div id="codex-workflow">
                         <h3>⚙️ 工作流程</h3>
-                        
+
                         <p>根据我们上一步给定的代码库，这里 Codex 会给出一些任务建议作为启动任务感受一下：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/cd8783c38d079f93.png" alt="任务建议">
                             <div class="image-caption">Codex 提供的任务建议</div>
                         </div>
 
                         <p>点击开启后会自动开始这三个任务：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/868f8cc8bc23bdd8.png" alt="任务执行">
                             <div class="image-caption">任务执行界面</div>
                         </div>
 
                         <p>点击正在运行的任务可以看到 Agent 是正在如何处理任务的：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/58ede4bc2668a9ba.png" alt="任务处理过程">
                             <div class="image-caption">Agent 处理任务的过程</div>
                         </div>
 
                         <p>任务完成后可以查看完成的结果：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/ca24df8182e0feec.png" alt="任务完成结果1">
                             <div class="image-caption">任务完成结果页面1</div>
@@ -1300,7 +1300,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
                         </div>
 
                         <p>点击以下的"已工作 x 分 x 秒"可以查看完整的工作日志：</p>
-                        
+
                         <div class="image-container">
                             <img src="images/6f35c8955190d16f.png" alt="工作日志">
                             <div class="image-caption">完整的工作日志</div>
@@ -1324,7 +1324,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                 <section id="comparison">
                     <h2>📊 工具对比与总结</h2>
-                    
+
                     <div class="tool-card">
                         <div class="tool-title">🏆 各工具特色对比</div>
                         <table>
@@ -1371,7 +1371,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
                     </div>
 
                     <h3>🎯 选择建议</h3>
-                    
+
                     <div class="feature-card">
                         <h4>🏢 企业级开发</h4>
                         <p>推荐使用 <strong>Claude Code</strong>，具有最强的代码理解和生成能力，适合复杂项目</p>
@@ -1395,14 +1395,14 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
                 <section id="summary">
                     <h2>🎯 总结与展望</h2>
-                    
+
                     <div class="highlight-box">
                         <h4>🌟 Vibe Coding 的核心价值</h4>
                         <p>Vibe Coding 代表了编程方式的革命性转变，从传统的"手写代码"转向"意图驱动的AI协作"。这不仅仅是工具的升级，更是编程思维模式的根本性改变。</p>
                     </div>
 
                     <h3>🚀 未来发展趋势</h3>
-                    
+
                     <div class="feature-card">
                         <h4>📈 AI能力持续提升</h4>
                         <p>随着大语言模型的不断进步，AI的代码理解和生成能力将越来越强</p>
@@ -1424,7 +1424,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
                     </div>
 
                     <h3>💡 最佳实践建议</h3>
-                    
+
                     <ol class="step-list">
                         <li class="step"><strong>明确表达需求：</strong>清晰、具体地描述你想要实现的功能</li>
                         <li class="step"><strong>迭代优化：</strong>根据AI的输出结果，不断调整和优化需求描述</li>
@@ -1451,7 +1451,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
         // 移动菜单切换
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
-        
+
         if (mobileMenuBtn && navLinks) {
             mobileMenuBtn.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
@@ -1462,17 +1462,17 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 90,
                         behavior: 'smooth'
                     });
-                    
+
                     // 如果是移动菜单，点击后关闭
                     if (navLinks && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
@@ -1483,7 +1483,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
         // 返回顶部按钮
         const backToTopBtn = document.getElementById('backToTop');
-        
+
         if (backToTopBtn) {
             window.addEventListener('scroll', () => {
                 if (window.pageYOffset > 300) {
@@ -1496,18 +1496,18 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
 
         // 代码复制功能
         const copyBtns = document.querySelectorAll('.copy-btn');
-        
+
         copyBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const codeBlock = btn.closest('.code-header').nextElementSibling;
                 if (codeBlock && codeBlock.tagName === 'PRE') {
                     const code = codeBlock.textContent;
-                    
+
                     navigator.clipboard.writeText(code).then(() => {
                         const originalText = btn.textContent;
                         btn.textContent = '已复制!';
                         btn.style.background = 'var(--success)';
-                        
+
                         setTimeout(() => {
                             btn.textContent = originalText;
                             btn.style.background = '';
@@ -1516,7 +1516,7 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
                         console.error('复制失败:', err);
                         btn.textContent = '复制失败';
                         btn.style.background = 'var(--danger)';
-                        
+
                         setTimeout(() => {
                             btn.textContent = '复制';
                             btn.style.background = '';
@@ -1530,32 +1530,32 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
         function initTocHighlight() {
             const sections = document.querySelectorAll('section[id], div[id]');
             const tocLinks = document.querySelectorAll('.toc-list a[href^="#"]');
-            
+
             function highlightTocItem() {
                 let current = '';
                 const scrollPos = window.pageYOffset + 150; // 添加偏移量
-                
+
                 // 找到当前在视口中的section
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     const sectionHeight = section.offsetHeight;
                     const sectionBottom = sectionTop + sectionHeight;
-                    
+
                     if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
                         current = section.getAttribute('id');
                     }
                 });
-                
+
                 // 如果在页面顶部，高亮第一个链接
                 if (scrollPos < 200) {
                     current = 'concept';
                 }
-                
+
                 // 如果在页面底部，高亮最后一个链接
                 if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100) {
                     current = 'summary';
                 }
-                
+
                 // 更新高亮状态
                 tocLinks.forEach(link => {
                     link.classList.remove('active');
@@ -1564,10 +1564,10 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
                     }
                 });
             }
-            
+
             // 初始化时执行一次
             highlightTocItem();
-            
+
             // 滚动时执行
             let ticking = false;
             window.addEventListener('scroll', () => {
@@ -1587,4 +1587,4 @@ export OPENAI_MODEL="qwen3-coder-plus"</code></pre>
         });
     </script>
 </body>
-</html> 
+</html>
